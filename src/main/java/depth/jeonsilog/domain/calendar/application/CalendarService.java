@@ -36,9 +36,8 @@ public class CalendarService {
 
     private static final String DIRNAME = "calendar_img";
 
-    // Description : 갤러리 이미지 업로드
     @Transactional
-    public ResponseEntity<?> uploadImage(UserPrincipal userPrincipal, CalendarRequestDto.UploadImageReq uploadImageReq, MultipartFile img) throws IOException {
+    public void uploadImage(UserPrincipal userPrincipal, CalendarRequestDto.UploadImageReq uploadImageReq, MultipartFile img) throws IOException {
         User findUser = userService.validateUserByToken(userPrincipal);
 
         if (!img.isEmpty()) {
@@ -54,16 +53,10 @@ public class CalendarService {
                 calendarRepository.save(calendar);
             }
         }
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(
-                Message.builder().message("포토캘린더에 이미지를 업로드했습니다.").build());
-
-        return ResponseEntity.ok(apiResponse);
     }
 
-    // Description: 전시회 포스터 업로드
     @Transactional
-    public ResponseEntity<?> uploadPoster(UserPrincipal userPrincipal, CalendarRequestDto.UploadPosterReq uploadPosterReq) {
+    public void uploadPoster(UserPrincipal userPrincipal, CalendarRequestDto.UploadPosterReq uploadPosterReq) {
         User findUser = userService.validateUserByToken(userPrincipal);
 
         Optional<Calendar> checkCalendar = calendarRepository.findByUserAndPhotoDate(findUser, uploadPosterReq.getDate());
@@ -73,16 +66,10 @@ public class CalendarService {
             Calendar calendar = CalendarConverter.toCalendar(findUser, uploadPosterReq.getDate(), uploadPosterReq.getImgUrl(), uploadPosterReq.getCaption());
             calendarRepository.save(calendar);
         }
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(
-                Message.builder().message("포토캘린더에 이미지를 업로드했습니다.").build());
-
-        return ResponseEntity.ok(apiResponse);
     }
 
-    // Description: 이미지 삭제
     @Transactional
-    public ResponseEntity<?> deleteCalendar(UserPrincipal userPrincipal, CalendarRequestDto.UploadImageReq deleteImageReq) {
+    public void deleteCalendar(UserPrincipal userPrincipal, CalendarRequestDto.UploadImageReq deleteImageReq) {
         User findUser = userService.validateUserByToken(userPrincipal);
 
         Optional<Calendar> findCalendar = calendarRepository.findByUserAndPhotoDate(findUser, deleteImageReq.getDate());
@@ -92,11 +79,6 @@ public class CalendarService {
 
         s3Uploader.deleteImage(DIRNAME, calendar.getImageUrl());
         calendarRepository.delete(calendar);
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(
-                Message.builder().message("이미지를 삭제했습니다.").build());
-
-        return ResponseEntity.ok(apiResponse);
     }
 
     // Description: 나의 월별 이미지 목록 조회

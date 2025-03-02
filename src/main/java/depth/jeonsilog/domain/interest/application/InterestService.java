@@ -32,7 +32,6 @@ public class InterestService {
     private final ExhibitionRepository exhibitionRepository;
     private final UserService userService;
 
-    // 즐겨찾기 등록
     @Transactional
     public ResponseEntity<?> registerInterest(UserPrincipal userPrincipal, Long exhibitionId) {
         User findUser = userService.validateUserByToken(userPrincipal);
@@ -48,13 +47,11 @@ public class InterestService {
 
         InterestResponseDto.InterestRes interestRes = InterestConverter.toInterestRes(interest);
         ApiResponse apiResponse = ApiResponse.toApiResponse(interestRes);
-
         return ResponseEntity.ok(apiResponse);
     }
 
-    // 즐겨찾기 해제
     @Transactional
-    public ResponseEntity<?> deleteInterest(UserPrincipal userPrincipal, Long exhibitionId) {
+    public void deleteInterest(UserPrincipal userPrincipal, Long exhibitionId) {
         User findUser = userService.validateUserByToken(userPrincipal);
         Optional<Exhibition> exhibition = exhibitionRepository.findById(exhibitionId);
         DefaultAssert.isTrue(exhibition.isPresent(), "전시회 id가 올바르지 않습니다.");
@@ -62,14 +59,8 @@ public class InterestService {
         Optional<Interest> interest = interestRepository.findByUserIdAndExhibitionId(findUser.getId(), exhibition.get().getId());
         Interest findInterest = interest.get();
         interestRepository.delete(findInterest);
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(
-                Message.builder().message("[" + exhibition.get().getName() + "]를 즐겨찾기 해제했습니다.").build());
-
-        return ResponseEntity.ok(apiResponse);
     }
 
-    // 즐겨찾기 목록 조회
     public ResponseEntity<?> getInterestList(Integer page, UserPrincipal userPrincipal) {
         User findUser = userService.validateUserByToken(userPrincipal);
 
@@ -81,10 +72,9 @@ public class InterestService {
 
         List<InterestResponseDto.InterestListRes> interestListResList = InterestConverter.toInterestListRes(interestList);
         boolean hasNextPage = interestPage.hasNext();
+
         InterestResponseDto.InterestListResWithPaging interestListResWithPaging = InterestConverter.toInterestListResWithPaging(hasNextPage, interestListResList);
-
         ApiResponse apiResponse = ApiResponse.toApiResponse(interestListResWithPaging);
-
         return ResponseEntity.ok(apiResponse);
     }
 }

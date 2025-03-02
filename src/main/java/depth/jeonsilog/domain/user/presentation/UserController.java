@@ -36,19 +36,21 @@ public class UserController implements UserApi{
     }
 
     @PatchMapping("/nickname")
-    public ResponseEntity<?> changeNickname(
+    public ResponseEntity<Void> changeNickname(
             @CurrentUser UserPrincipal userPrincipal,
             @Valid @RequestBody UserRequestDto.ChangeNicknameReq changeNicknameReq
     ) {
-        return userService.changeNickname(userPrincipal, changeNicknameReq);
+        userService.changeNickname(userPrincipal, changeNicknameReq);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping(value = "/profile", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> changeProfile(
+    public ResponseEntity<Void> changeProfile(
             @CurrentUser UserPrincipal userPrincipal,
             @RequestPart(value = "img", required = false) MultipartFile img
     ) throws IOException {
-        return userService.changeProfile(userPrincipal, img);
+        userService.changeProfile(userPrincipal, img);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/search/{searchWord}")
@@ -82,10 +84,11 @@ public class UserController implements UserApi{
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteUser(
+    public ResponseEntity<Void> deleteUser(
             @CurrentUser UserPrincipal userPrincipal
     ) {
-        return userService.deleteUser(userPrincipal);
+        userService.deleteUser(userPrincipal);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/calendar/{userId}")
@@ -104,10 +107,11 @@ public class UserController implements UserApi{
 
 
     @PatchMapping("/fcm/token")
-    public ResponseEntity<?> updateFcmToken(
-           @CurrentUser UserPrincipal userPrincipal,
+    public ResponseEntity<Void> updateFcmToken(
+            @CurrentUser UserPrincipal userPrincipal,
             @RequestBody UserRequestDto.UpdateFcmToken fcmToken
             ) {
-        return userService.updateFcmToken(userPrincipal, fcmToken);
+        userService.updateFcmToken(userPrincipal, fcmToken);
+        return ResponseEntity.noContent().build();
     }
 }

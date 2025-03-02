@@ -36,11 +36,8 @@ public class ReportService {
     private final ExhibitionService exhibitionService;
 
     // TODO Think : Report의 reportedId는 타입 별 해당 PK(ID)임 !
-
-    // Description : 신고
     @Transactional
-    public ResponseEntity<?> report(UserPrincipal userPrincipal, ReportRequestDto.ReportReq reportReq) {
-
+    public void report(UserPrincipal userPrincipal, ReportRequestDto.ReportReq reportReq) {
         User user = userService.validateUserByToken(userPrincipal);
         Long id = reportReq.getReportedId();
         ReportType reportType = reportReq.getReportType();
@@ -57,9 +54,6 @@ public class ReportService {
                 r.updateChecked(false);
             });
         }
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(Message.builder().message("신고가 완료되었습니다.").build());
-        return ResponseEntity.ok(apiResponse);
     }
 
     private void validate(ReportType reportType, Long id) {

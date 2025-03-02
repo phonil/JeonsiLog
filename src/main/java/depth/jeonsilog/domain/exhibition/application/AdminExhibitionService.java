@@ -40,14 +40,12 @@ public class AdminExhibitionService {
     private static final String DIRNAME = "exhibition_img";
 
     @Transactional
-    public ResponseEntity<?> updateExhibitionDetail(UserPrincipal userPrincipal, ExhibitionRequestDto.UpdateExhibitionDetailReq updateExhibitionDetailReq, MultipartFile img) throws IOException {
+    public void updateExhibitionDetail(UserPrincipal userPrincipal, ExhibitionRequestDto.UpdateExhibitionDetailReq updateExhibitionDetailReq, MultipartFile img) throws IOException {
         User user = userService.validateUserByToken(userPrincipal);
         DefaultAssert.isTrue(user.getRole().equals(Role.ADMIN), "관리자만 수정할 수 있습니다.");
-
         Exhibition exhibition = exhibitionService.validateExhibitionById(updateExhibitionDetailReq.getExhibitionId());
 
         String storedFileName = null;
-
         if (updateExhibitionDetailReq.getIsImageChange()) { // 이미지를 변경하는 경우
             if (img != null) { // 이미지 삭제가 아닌 이미지를 변경하거나 추가하는 경우
                 storedFileName = s3Uploader.upload(img, DIRNAME);
@@ -57,18 +55,12 @@ public class AdminExhibitionService {
         }
 
         exhibition.updateExhibitionDetail(updateExhibitionDetailReq, storedFileName);
-
         Place place = exhibition.getPlace();
         place.updatePlaceWithExhibitionDetail(updateExhibitionDetailReq.getUpdatePlaceInfo());
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(
-                Message.builder().message("전시회 및 전시공간 정보를 수정했습니다.").build());
-
-        return ResponseEntity.ok(apiResponse);
     }
 
     @Transactional
-    public ResponseEntity<?> updateExhibitionSequence(UserPrincipal userPrincipal, ExhibitionRequestDto.UpdateExhibitionSequenceList updateSequenceReq) {
+    public void updateExhibitionSequence(UserPrincipal userPrincipal, ExhibitionRequestDto.UpdateExhibitionSequenceList updateSequenceReq) {
         User findUser = userService.validateUserByToken(userPrincipal);
         DefaultAssert.isTrue(findUser.getRole() == Role.ADMIN, "관리자만 전시회 순서를 변경할 수 있습니다.");
 
@@ -94,10 +86,5 @@ public class AdminExhibitionService {
                 break;
             }
         }
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(
-                Message.builder().message("전시회 순서를 변경했습니다.").build());
-
-        return ResponseEntity.ok(apiResponse);
     }
 }

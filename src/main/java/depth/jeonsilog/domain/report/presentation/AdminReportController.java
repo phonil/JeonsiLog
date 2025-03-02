@@ -24,10 +24,11 @@ public class AdminReportController implements AdminReportApi {
     }
 
     @PatchMapping("/check")
-    public ResponseEntity<?> checkReport(
+    public ResponseEntity<Void> checkReport(
             @CurrentUser UserPrincipal userPrincipal,
             @RequestBody ReportRequestDto.ReportReq reportReq
     ) {
-        return adminReportService.checkReport(userPrincipal, reportReq);
+        adminReportService.checkReport(userPrincipal, reportReq);
+        return ResponseEntity.noContent().build();
     }
 }

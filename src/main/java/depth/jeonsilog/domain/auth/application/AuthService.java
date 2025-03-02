@@ -46,38 +46,27 @@ public class AuthService {
     private final UserService userService;
 
     @Transactional
-    public ResponseEntity<?> signUp(AuthRequestDto.SignUpReq signUpReq){
-
+    public void signUp(AuthRequestDto.SignUpReq signUpReq){
         User user = AuthConverter.toUser(signUpReq, passwordEncoder);
         userRepository.save(user);
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(
-                Message.builder().message("회원가입에 성공하였습니다.").build());
-
-        return ResponseEntity.ok(apiResponse);
     }
 
     @Transactional
     public ResponseEntity<?> signIn(AuthRequestDto.SignInReq signInReq){
-
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 signInReq.getEmail(),
                 signInReq.getProviderId()
             )
         );
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         TokenMapping tokenMapping = customTokenProviderService.createToken(authentication);
         Token token = AuthConverter.toToken(tokenMapping);
-
         tokenRepository.save(token);
 
         AuthResponseDto.AuthRes authResponse = AuthConverter.toAuthRes(token, tokenMapping);
-
         ApiResponse apiResponse = ApiResponse.toApiResponse(authResponse);
-        
         return ResponseEntity.ok(apiResponse);
     }
 
@@ -95,9 +84,9 @@ public class AuthService {
         TokenMapping tokenMapping;
 
         Long expirationTime = customTokenProviderService.getExpiration(tokenRefreshRequest.getRefreshToken());
-        if(expirationTime > 0){
+        if(expirationTime > 0) {
             tokenMapping = customTokenProviderService.refreshToken(authentication, token.get().getRefreshToken());
-        }else{
+        } else {
             tokenMapping = customTokenProviderService.createToken(authentication);
         }
 
@@ -105,24 +94,15 @@ public class AuthService {
         tokenRepository.save(updateToken);
 
         AuthResponseDto.AuthRes authResponse = AuthConverter.toAuthRes(updateToken, tokenMapping);
-
         ApiResponse apiResponse = ApiResponse.toApiResponse(authResponse);
-
         return ResponseEntity.ok(apiResponse);
     }
 
     @Transactional
-    public ResponseEntity<?> signout(UserPrincipal userPrincipal) {
-
+    public void signOut(UserPrincipal userPrincipal) {
         Optional<Token> token = tokenRepository.findByUserEmail(userPrincipal.getEmail());
         DefaultAssert.isTrue(token.isPresent(), "이미 로그아웃 되었습니다");
-
         tokenRepository.delete(token.get());
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(
-                Message.builder().message("로그아웃 되었습니다.").build());
-
-        return ResponseEntity.ok(apiResponse);
     }
 
     public ResponseEntity<?> checkNickname(String nickname) {

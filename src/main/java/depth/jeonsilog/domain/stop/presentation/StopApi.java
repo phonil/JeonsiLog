@@ -28,10 +28,10 @@ public interface StopApi {
 
     @Operation(summary = "정지된 유저 최초 접속", description = "정지된 유저 최초 접속 시 확인")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "확인 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "204", description = "확인 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "확인 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
-    ResponseEntity<?> updateIsFirstAccess(
+    ResponseEntity<Void> updateIsFirstAccess(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser final UserPrincipal userPrincipal
     );
 }

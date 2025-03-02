@@ -5,6 +5,7 @@ import depth.jeonsilog.domain.calendar.dto.CalendarRequestDto;
 import depth.jeonsilog.global.config.security.token.CurrentUser;
 import depth.jeonsilog.global.config.security.token.UserPrincipal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,28 +21,31 @@ public class CalendarController implements CalendarApi {
     private final CalendarService calendarService;
 
     @PostMapping(value = "/image", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> uploadImage(
+    public ResponseEntity<Void> uploadImage(
             @CurrentUser UserPrincipal userPrincipal,
             @RequestPart("uploadImageReq") CalendarRequestDto.UploadImageReq uploadImageReq,
             @RequestPart(value = "img", required = false) MultipartFile img
     ) throws IOException {
-        return calendarService.uploadImage(userPrincipal, uploadImageReq, img);
+        calendarService.uploadImage(userPrincipal, uploadImageReq, img);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping(value = "/exhibition")
-    public ResponseEntity<?> uploadPoster(
+    public ResponseEntity<Void> uploadPoster(
             @CurrentUser UserPrincipal userPrincipal,
             @RequestBody CalendarRequestDto.UploadPosterReq uploadPosterReq
     ) {
-        return calendarService.uploadPoster(userPrincipal, uploadPosterReq);
+        calendarService.uploadPoster(userPrincipal, uploadPosterReq);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteCalendar(
+    public ResponseEntity<Void> deleteCalendar(
             @CurrentUser UserPrincipal userPrincipal,
             @RequestBody CalendarRequestDto.UploadImageReq deleteImageReq
     ) {
-        return calendarService.deleteCalendar(userPrincipal, deleteImageReq);
+        calendarService.deleteCalendar(userPrincipal, deleteImageReq);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{date}")

@@ -31,11 +31,11 @@ public interface InterestApi {
 
     @Operation(summary = "즐겨찾기 해제", description = "전시회 id를 이용하여 즐겨찾기를 해제합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "해제 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "204", description = "해제 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "해제 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @DeleteMapping("/{exhibitionId}")
-    ResponseEntity<?> deleteInterest(
+    ResponseEntity<Void> deleteInterest(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "전시회 id를 입력해주세요.", required = true) @PathVariable Long exhibitionId
     );

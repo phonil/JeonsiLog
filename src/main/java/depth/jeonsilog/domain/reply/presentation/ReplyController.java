@@ -5,6 +5,7 @@ import depth.jeonsilog.domain.reply.dto.ReplyRequestDto;
 import depth.jeonsilog.global.config.security.token.CurrentUser;
 import depth.jeonsilog.global.config.security.token.UserPrincipal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,19 +27,21 @@ public class ReplyController implements ReplyApi {
     }
 
     @PostMapping
-    public ResponseEntity<?> createReply(
+    public ResponseEntity<Void> createReply(
             @CurrentUser UserPrincipal userPrincipal,
             @RequestBody ReplyRequestDto.CreateReplyReq createReplyReq
             ) throws IOException {
-        return replyService.createReply(userPrincipal, createReplyReq);
+        replyService.createReply(userPrincipal, createReplyReq);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/{replyId}")
-    public ResponseEntity<?> deleteReply(
+    public ResponseEntity<Void> deleteReply(
             @CurrentUser UserPrincipal userPrincipal,
             @PathVariable(value = "replyId") Long replyId
     ) {
-        return replyService.deleteReply(userPrincipal, replyId);
+        replyService.deleteReply(userPrincipal, replyId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{replyId}")

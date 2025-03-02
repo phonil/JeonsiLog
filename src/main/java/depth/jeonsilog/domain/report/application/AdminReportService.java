@@ -41,7 +41,6 @@ public class AdminReportService {
     private static final int DEFAULT_PAGE_SIZE = 20; // 페이지당 기본 20개 항목
 
     public ResponseEntity<?> findReportList(Integer page, UserPrincipal userPrincipal) {
-
         User user = userService.validateUserByToken(userPrincipal);
         DefaultAssert.isTrue(user.getRole().equals(Role.ADMIN), "관리자만 조회할 수 있습니다.");
 
@@ -62,8 +61,7 @@ public class AdminReportService {
     }
 
     @Transactional
-    public ResponseEntity<?> checkReport(UserPrincipal userPrincipal, ReportRequestDto.ReportReq dto) {
-
+    public void checkReport(UserPrincipal userPrincipal, ReportRequestDto.ReportReq dto) {
         User user = userService.validateUserByToken(userPrincipal);
         DefaultAssert.isTrue(user.getRole().equals(Role.ADMIN), "관리자만 확인할 수 있습니다.");
 
@@ -71,9 +69,6 @@ public class AdminReportService {
         reports.forEach(r -> {
             r.updateChecked(true);
         });
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(Message.builder().message("신고가 확인되었습니다.").build());
-        return ResponseEntity.ok(apiResponse);
     }
 
     private List<Object> createTargetList(List<Report> reports) {

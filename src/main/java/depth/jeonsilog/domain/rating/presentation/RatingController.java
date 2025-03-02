@@ -6,6 +6,7 @@ import depth.jeonsilog.global.config.security.token.CurrentUser;
 import depth.jeonsilog.global.config.security.token.UserPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,27 +20,30 @@ public class RatingController implements RatingApi {
     private final RatingService ratingService;
 
     @PostMapping
-    public ResponseEntity<?> registerInterest(
+    public ResponseEntity<Void> registerInterest(
             @CurrentUser UserPrincipal userPrincipal,
             @Valid @RequestBody RatingRequestDto.RatingReq ratingReq
             ) throws IOException {
-        return ratingService.registerRating(userPrincipal, ratingReq);
+        ratingService.registerRating(userPrincipal, ratingReq);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping
-    public ResponseEntity<?> updateRating(
+    public ResponseEntity<Void> updateRating(
             @CurrentUser UserPrincipal userPrincipal,
             @Valid @RequestBody RatingRequestDto.RatingReq ratingReq
     ) {
-        return ratingService.updateRating(userPrincipal, ratingReq);
+        ratingService.updateRating(userPrincipal, ratingReq);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{exhibitionId}")
-    public ResponseEntity<?> deleteRating(
+    public ResponseEntity<Void> deleteRating(
             @CurrentUser UserPrincipal userPrincipal,
             @PathVariable Long exhibitionId
     ) {
-        return ratingService.deleteRating(userPrincipal, exhibitionId);
+        ratingService.deleteRating(userPrincipal, exhibitionId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping

@@ -15,21 +15,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Auth API", description = "Authorization 관련 API입니다.")
 public interface AuthApi {
 
     @Operation(summary = "유저 회원가입", description = "유저 회원가입을 수행합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "회원가입 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "201", description = "회원가입 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "회원가입 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @PostMapping(value = "/sign-up")
-    ResponseEntity<?> signup(
+    ResponseEntity<Void> signup(
             @Parameter(description = "Schemas의 SignUpRequest를 참고해주세요.", required = true) @Valid @RequestBody AuthRequestDto.SignUpReq signUpRequest
     );
 
@@ -56,11 +53,11 @@ public interface AuthApi {
 
     @Operation(summary = "유저 로그아웃", description = "유저 로그아웃을 수행합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "로그아웃 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "204", description = "로그아웃 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "로그아웃 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
-    @PostMapping(value = "/sign-out")
-    ResponseEntity<?> signout(
+    @DeleteMapping(value = "/sign-out")
+    ResponseEntity<Void> signOut(
             @Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal
     );
 

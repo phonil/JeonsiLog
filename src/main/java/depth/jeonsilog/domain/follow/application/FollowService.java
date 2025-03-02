@@ -33,10 +33,8 @@ public class FollowService {
     private final UserService userService;
     private final AlarmCreateService alarmService;
 
-    // 팔로우하기
     @Transactional
-    public ResponseEntity<?> follow(UserPrincipal userPrincipal, Long userId) throws IOException {
-
+    public void follow(UserPrincipal userPrincipal, Long userId) throws IOException {
         User findUser = userService.validateUserByToken(userPrincipal);
         User followUser = userService.validateUserById(userId);
         DefaultAssert.isTrue((!Objects.equals(findUser, followUser)), "나를 팔로우 할 수 없습니다.");
@@ -48,54 +46,31 @@ public class FollowService {
 
         Follow follow = FollowConverter.toFollow(findUser, followUser);
         followRepository.save(follow);
-
         alarmService.makeFollowAlarm(follow);
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(
-                Message.builder().message("[" + followUser.getNickname() + "]님을 팔로우했습니다.").build());
-
-        return ResponseEntity.ok(apiResponse);
     }
 
-    // 팔로우 취소하기
     @Transactional
-    public ResponseEntity<?> deleteFollowing(UserPrincipal userPrincipal, Long userId) {
-
+    public void deleteFollowing(UserPrincipal userPrincipal, Long userId) {
         User findUser = userService.validateUserByToken(userPrincipal);
         User followUser = userService.validateUserById(userId);
         DefaultAssert.isTrue((!Objects.equals(findUser, followUser)), "나를 팔로우 취소할 수 없습니다.");
 
         Optional<Follow> findFollow = followRepository.findByUserAndFollow(findUser, followUser);
         DefaultAssert.isTrue(findFollow.isPresent(), "유저를 팔로우하고있지 않습니다.");
-
         followRepository.delete(findFollow.get());
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(
-                Message.builder().message("[" + followUser.getNickname() + "]님을 팔로우 취소했습니다.").build());
-
-        return ResponseEntity.ok(apiResponse);
     }
 
-    // 팔로워 삭제하기
     @Transactional
-    public ResponseEntity<?> deleteFollower(UserPrincipal userPrincipal, Long userId) {
-
+    public void deleteFollower(UserPrincipal userPrincipal, Long userId) {
         User findUser = userService.validateUserByToken(userPrincipal);
         User followUser = userService.validateUserById(userId);
         DefaultAssert.isTrue((!Objects.equals(findUser, followUser)), "나를 팔로워 취소할 수 없습니다.");
 
         Optional<Follow> findFollow = followRepository.findByUserAndFollow(followUser, findUser);
         DefaultAssert.isTrue(findFollow.isPresent(), "해당 유저가 나를 팔로우하지 않습니다.");
-
         followRepository.delete(findFollow.get());
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(
-                Message.builder().message("[" + followUser.getNickname() + "]님을 팔로워에서 삭제했습니다.").build());
-
-        return ResponseEntity.ok(apiResponse);
     }
 
-    // 나의 팔로잉 리스트 조회
     public ResponseEntity<?> findMyFollowingList(Integer page, UserPrincipal userPrincipal) {
 
         User findUser = userService.validateUserByToken(userPrincipal);
@@ -108,14 +83,12 @@ public class FollowService {
 
         List<FollowResponseDto.MyFollowingListRes> followListRes = FollowConverter.toMyFollowingListRes(followList);
         boolean hasNextPage = followPage.hasNext();
+
         FollowResponseDto.MyFollowingListResWithPaging myFollowingListResWithPaging = FollowConverter.toMyFollowingListResWithPaging(hasNextPage, followListRes);
-
         ApiResponse apiResponse = ApiResponse.toApiResponse(myFollowingListResWithPaging);
-
         return ResponseEntity.ok(apiResponse);
     }
 
-    // 나의 팔로워 리스트 조회
     public ResponseEntity<?> findMyFollowerList(Integer page, UserPrincipal userPrincipal) {
 
         User findUser = userService.validateUserByToken(userPrincipal);
@@ -128,14 +101,12 @@ public class FollowService {
 
         List<FollowResponseDto.MyFollowerListRes> followingListRes = FollowConverter.toMyFollowerListRes(followList, followRepository);
         boolean hasNextPage = followPage.hasNext();
+
         FollowResponseDto.MyFollowerListResWithPaging myFollowerListResWithPaging = FollowConverter.toMyFollowerListResWithPaging(hasNextPage, followingListRes);
-
         ApiResponse apiResponse = ApiResponse.toApiResponse(myFollowerListResWithPaging);
-
         return ResponseEntity.ok(apiResponse);
     }
 
-    // 유저의 팔로잉 리스트 조회
     public ResponseEntity<?> findUserFollowingList(Integer page, UserPrincipal userPrincipal, Long userId) {
 
         User me = userService.validateUserByToken(userPrincipal);
@@ -149,14 +120,12 @@ public class FollowService {
 
         List<FollowResponseDto.UserFollowingListRes> followListRes = FollowConverter.toUserFollowingListRes(me, followList, followRepository);
         boolean hasNextPage = followPage.hasNext();
+
         FollowResponseDto.UserFollowingListResWithPaging userFollowingListResWithPaging = FollowConverter.toUserFollowingListResWithPaging(hasNextPage, followListRes);
-
         ApiResponse apiResponse = ApiResponse.toApiResponse(userFollowingListResWithPaging);
-
         return ResponseEntity.ok(apiResponse);
     }
 
-    // 유저의 팔로워 리스트 조회
     public ResponseEntity<?> findUserFollowerList(Integer page, UserPrincipal userPrincipal, Long userId) {
 
         User me = userService.validateUserByToken(userPrincipal);
@@ -170,10 +139,9 @@ public class FollowService {
 
         List<FollowResponseDto.UserFollowerListRes> followingListRes = FollowConverter.toUserFollowerListRes(me, followList, followRepository);
         boolean hasNextPage = followPage.hasNext();
+
         FollowResponseDto.UserFollowerListResWithPaging userFollowerListResWithPaging = FollowConverter.toUserFollowerListResWithPaging(hasNextPage, followingListRes);
-
         ApiResponse apiResponse = ApiResponse.toApiResponse(userFollowerListResWithPaging);
-
         return ResponseEntity.ok(apiResponse);
     }
 }

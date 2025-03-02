@@ -4,6 +4,7 @@ import depth.jeonsilog.domain.follow.application.FollowService;
 import depth.jeonsilog.global.config.security.token.CurrentUser;
 import depth.jeonsilog.global.config.security.token.UserPrincipal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,27 +18,30 @@ public class FollowController implements FollowApi {
     private final FollowService followService;
 
     @PostMapping("/{userId}")
-    public ResponseEntity<?> follow(
+    public ResponseEntity<Void> follow(
             @CurrentUser UserPrincipal userPrincipal,
             @PathVariable(value = "userId") Long userId
     ) throws IOException {
-        return followService.follow(userPrincipal, userId);
+        followService.follow(userPrincipal, userId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<?> deleteFollow(
+    public ResponseEntity<Void> deleteFollow(
             @CurrentUser UserPrincipal userPrincipal,
             @PathVariable(value = "userId") Long userId
     ) {
-        return followService.deleteFollowing(userPrincipal, userId);
+        followService.deleteFollowing(userPrincipal, userId);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/follower/{userId}")
-    public ResponseEntity<?> deleteFollower(
+    public ResponseEntity<Void> deleteFollower(
             @CurrentUser UserPrincipal userPrincipal,
             @PathVariable(value = "userId") Long userId
     ) {
-        return followService.deleteFollower(userPrincipal, userId);
+        followService.deleteFollower(userPrincipal, userId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/following")

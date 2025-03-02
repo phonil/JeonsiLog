@@ -50,9 +50,8 @@ public class ReviewService {
     private final UserService userService;
     private final AlarmCreateService alarmService;
 
-    // 감상평 작성
     @Transactional
-    public ResponseEntity<?> writeReview(UserPrincipal userPrincipal, ReviewRequestDto.WriteReviewReq writeReviewReq) throws IOException {
+    public void writeReview(UserPrincipal userPrincipal, ReviewRequestDto.WriteReviewReq writeReviewReq) throws IOException {
         User findUser = userService.validateUserByToken(userPrincipal);
         Optional<Exhibition> exhibition = exhibitionRepository.findById(writeReviewReq.getExhibitionId());
         DefaultAssert.isTrue(exhibition.isPresent(), "전시회 id가 올바르지 않습니다.");
@@ -67,16 +66,11 @@ public class ReviewService {
             case 20 -> findUser.updateUserLevel(UserLevel.ADVANCED);
             case 30 -> findUser.updateUserLevel(UserLevel.MASTER);
         }
-
         alarmService.makeReviewAlarm(review);
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(Message.builder().message("감상평을 작성했습니다.").build());
-        return ResponseEntity.ok(apiResponse);
     }
 
-    // 감상평 삭제
     @Transactional
-    public ResponseEntity<?> deleteReview(UserPrincipal userPrincipal, Long reviewId) {
+    public void deleteReview(UserPrincipal userPrincipal, Long reviewId) {
         User findUser = userService.validateUserByToken(userPrincipal);
         Review findReview = validateReviewById(reviewId);
 
@@ -87,14 +81,9 @@ public class ReviewService {
         for (Reply reply : replyList) {
             reply.updateStatus(Status.DELETE);
         }
-
         findReview.updateStatus(Status.DELETE);
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(Message.builder().message("감상평을 삭제했습니다.").build());
-        return ResponseEntity.ok(apiResponse);
     }
 
-    // 전시회의 감상평 목록 조회
     public ResponseEntity<?> getReviewList(Integer page, Long exhibitionId) {
         Optional<Exhibition> exhibition = exhibitionRepository.findById(exhibitionId);
         DefaultAssert.isTrue(exhibition.isPresent(), "전시회 id가 올바르지 않습니다.");
@@ -113,7 +102,6 @@ public class ReviewService {
         return ResponseEntity.ok(apiResponse);
     }
 
-    // 나의 감상평 목록 조회
     public ResponseEntity<?> getMyReviewList(Integer page, UserPrincipal userPrincipal) {
         User findUser = userService.validateUserByToken(userPrincipal);
 
@@ -135,7 +123,6 @@ public class ReviewService {
         return ResponseEntity.ok(apiResponse);
     }
 
-    // 타 유저의 감상평 목록 조회
     public ResponseEntity<?> getUserReviewList(Integer page, Long userId) {
         User findUser = userService.validateUserById(userId);
 
@@ -157,7 +144,6 @@ public class ReviewService {
         return ResponseEntity.ok(apiResponse);
     }
 
-    // 전시회에 감상평을 남겼는지 체크
     public ResponseEntity<?> checkIsWrite(UserPrincipal userPrincipal, Long exhibitionId) {
         User findUser = userService.validateUserByToken(userPrincipal);
         Optional<Exhibition> findExhibition = exhibitionRepository.findById(exhibitionId);
@@ -170,7 +156,6 @@ public class ReviewService {
         return ResponseEntity.ok(apiResponse);
     }
 
-    // Description : Review Id로 review 조회
     public ResponseEntity<?> getReview(Long reviewId) {
 
         Review review = validateReviewById(reviewId);
@@ -191,20 +176,11 @@ public class ReviewService {
         return ResponseEntity.ok(apiResponse);
     }
 
-    // Description : Review contents 수정
     @Transactional
-    public ResponseEntity<?> updateReview(UserPrincipal userPrincipal, ReviewRequestDto.UpdateReviewReq updateReviewReq) {
-
+    public void updateReview(UserPrincipal userPrincipal, ReviewRequestDto.UpdateReviewReq updateReviewReq) {
         User user = userService.validateUserByToken(userPrincipal);
         Review review = validateReviewByIdAndUserId(updateReviewReq.getReviewId(), user.getId());
-
         review.updateContents(updateReviewReq.getContents());
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(
-                Message.builder()
-                       .message("감상평을 수정했습니다.")
-                       .build());
-        return ResponseEntity.ok(apiResponse);
     }
 
     public Review validateReviewById(Long reviewId) {
@@ -218,5 +194,4 @@ public class ReviewService {
         DefaultAssert.isTrue(review.isPresent(), "감상평 정보가 올바르지 않습니다.");
         return review.get();
     }
-
 }

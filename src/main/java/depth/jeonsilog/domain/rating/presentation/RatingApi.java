@@ -24,33 +24,33 @@ public interface RatingApi {
 
     @Operation(summary = "별점 등록", description = "전시회 id를 이용하여 별점을 등록합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "등록 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "201", description = "등록 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "등록 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @PostMapping
-    ResponseEntity<?> registerInterest(
+    ResponseEntity<Void> registerInterest(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "Schemas의 RatingReq를 참고해주세요.", required = true) @Valid @RequestBody RatingRequestDto.RatingReq ratingReq
     ) throws IOException;
 
     @Operation(summary = "별점 수정", description = "전시회 id를 이용하여 별점을 수정합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "수정 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "204", description = "수정 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "수정 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @PatchMapping
-    ResponseEntity<?> updateRating(
+    ResponseEntity<Void> updateRating(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "Schemas의 RatingReq를 참고해주세요.", required = true) @Valid @RequestBody RatingRequestDto.RatingReq ratingReq
     );
 
     @Operation(summary = "별점 삭제", description = "전시회 id를 이용하여 별점을 삭제합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "삭제 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "204", description = "삭제 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "삭제 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @DeleteMapping("/{exhibitionId}")
-    ResponseEntity<?> deleteRating(
+    ResponseEntity<Void> deleteRating(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "전시회 id를 입력해주세요.", required = true) @PathVariable Long exhibitionId
     );

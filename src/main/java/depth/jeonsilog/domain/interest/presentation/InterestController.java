@@ -23,11 +23,12 @@ public class InterestController implements InterestApi {
     }
 
     @DeleteMapping("/{exhibitionId}")
-    public ResponseEntity<?> deleteInterest(
+    public ResponseEntity<Void> deleteInterest(
             @CurrentUser UserPrincipal userPrincipal,
             @PathVariable Long exhibitionId
     ) {
-        return interestService.deleteInterest(userPrincipal, exhibitionId);
+        interestService.deleteInterest(userPrincipal, exhibitionId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping

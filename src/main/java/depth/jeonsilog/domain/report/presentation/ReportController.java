@@ -5,6 +5,7 @@ import depth.jeonsilog.domain.report.dto.ReportRequestDto;
 import depth.jeonsilog.global.config.security.token.CurrentUser;
 import depth.jeonsilog.global.config.security.token.UserPrincipal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,10 +17,11 @@ public class ReportController implements ReportApi {
     private final ReportService reportService;
 
     @PostMapping
-    public ResponseEntity<?> report(
+    public ResponseEntity<Void> report(
             @CurrentUser UserPrincipal userPrincipal,
             @RequestBody ReportRequestDto.ReportReq reportReq
     ) {
-        return reportService.report(userPrincipal, reportReq);
+        reportService.report(userPrincipal, reportReq);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

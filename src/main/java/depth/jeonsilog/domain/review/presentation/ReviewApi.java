@@ -5,7 +5,6 @@ import depth.jeonsilog.domain.review.dto.ReviewResponseDto;
 import depth.jeonsilog.global.config.security.token.CurrentUser;
 import depth.jeonsilog.global.config.security.token.UserPrincipal;
 import depth.jeonsilog.global.payload.ErrorResponse;
-import depth.jeonsilog.global.payload.Message;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,22 +23,22 @@ public interface ReviewApi {
 
     @Operation(summary = "감상평 작성", description = "Access Token, 전시회 id를 이용하여 감상평을 작성합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "작성 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "201", description = "작성 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "작성 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @PostMapping
-    ResponseEntity<?> writeReview(
+    ResponseEntity<Void> writeReview(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "Schemas의 WriteReviewReq 를 참고해주세요.", required = true) @Valid @RequestBody ReviewRequestDto.WriteReviewReq writeReviewReq
     ) throws IOException;
 
     @Operation(summary = "감상평 삭제", description = "Access Token, 감상평 id를 이용하여 감상평을 삭제합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "삭제 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "204", description = "삭제 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "삭제 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @DeleteMapping("/{reviewId}")
-    ResponseEntity<?> deleteReview(
+    ResponseEntity<Void> deleteReview(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "감상평 id를 입력해주세요.", required = true) @PathVariable Long reviewId
     );
@@ -100,11 +99,11 @@ public interface ReviewApi {
 
     @Operation(summary = "감상평 수정", description = "Access Token, 감상평 id를 이용하여 감상평을 수정합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "수정 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "204", description = "수정 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "수정 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @PatchMapping
-    ResponseEntity<?> updateReview(
+    ResponseEntity<Void> updateReview(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "Schemas의 UpdateReviewReq 를 참고해주세요.", required = true) @Valid @RequestBody ReviewRequestDto.UpdateReviewReq updateReviewReq
     );

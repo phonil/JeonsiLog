@@ -6,6 +6,7 @@ import depth.jeonsilog.global.config.security.token.CurrentUser;
 import depth.jeonsilog.global.config.security.token.UserPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,19 +20,21 @@ public class ReviewController implements ReviewApi {
     private final ReviewService reviewService;
 
     @PostMapping
-    public ResponseEntity<?> writeReview(
+    public ResponseEntity<Void> writeReview(
             @CurrentUser UserPrincipal userPrincipal,
             @Valid @RequestBody ReviewRequestDto.WriteReviewReq writeReviewReq
             ) throws IOException {
-        return reviewService.writeReview(userPrincipal, writeReviewReq);
+        reviewService.writeReview(userPrincipal, writeReviewReq);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/{reviewId}")
-    public ResponseEntity<?> deleteReview(
+    public ResponseEntity<Void> deleteReview(
             @CurrentUser UserPrincipal userPrincipal,
             @PathVariable Long reviewId
     ) {
-        return reviewService.deleteReview(userPrincipal, reviewId);
+        reviewService.deleteReview(userPrincipal, reviewId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/exhibition/{exhibitionId}")
@@ -74,10 +77,11 @@ public class ReviewController implements ReviewApi {
     }
 
     @PatchMapping
-    public ResponseEntity<?> updateReview(
+    public ResponseEntity<Void> updateReview(
             @CurrentUser UserPrincipal userPrincipal,
             @Valid @RequestBody ReviewRequestDto.UpdateReviewReq updateReviewReq
     ) {
-        return reviewService.updateReview(userPrincipal, updateReviewReq);
+        reviewService.updateReview(userPrincipal, updateReviewReq);
+        return ResponseEntity.noContent().build();
     }
 }

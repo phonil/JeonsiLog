@@ -6,6 +6,7 @@ import depth.jeonsilog.global.config.security.token.CurrentUser;
 import depth.jeonsilog.global.config.security.token.UserPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +18,11 @@ public class AuthController implements AuthApi {
     private final AuthService authService;
 
     @PostMapping(value = "/sign-up")
-    public ResponseEntity<?> signup(
+    public ResponseEntity<Void> signup(
             @Valid @RequestBody AuthRequestDto.SignUpReq signUpRequest
     ) {
-        return authService.signUp(signUpRequest);
+        authService.signUp(signUpRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping(value = "/sign-in")
@@ -37,12 +39,12 @@ public class AuthController implements AuthApi {
         return authService.refresh(tokenRefreshRequest);
     }
 
-
-    @PostMapping(value = "/sign-out")
-    public ResponseEntity<?> signout(
+    @DeleteMapping(value = "/sign-out")
+    public ResponseEntity<Void> signOut(
             @CurrentUser UserPrincipal userPrincipal
     ) {
-        return authService.signout(userPrincipal);
+        authService.signOut(userPrincipal);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/nickname/{nickname}")

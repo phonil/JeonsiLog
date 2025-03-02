@@ -34,22 +34,22 @@ public interface ReplyApi {
 
     @Operation(summary = "댓글 작성", description = "감상평에 대한 댓글을 작성합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "댓글 작성 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "201", description = "댓글 작성 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "댓글 작성 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @PostMapping
-    ResponseEntity<?> createReply(
+    ResponseEntity<Void> createReply(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "Schemas의 CreateReplyReq를 참고해주세요", required = true) @RequestBody ReplyRequestDto.CreateReplyReq createReplyReq
     ) throws IOException;
 
     @Operation(summary = "댓글 삭제", description = "감상평에 대한 댓글을 삭제합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "댓글 삭제 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "204", description = "댓글 삭제 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "댓글 삭제 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @DeleteMapping("/{replyId}")
-    ResponseEntity<?> deleteReply(
+    ResponseEntity<Void> deleteReply(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "댓글 Id를 입력해주세요.", required = true) @PathVariable(value = "replyId") Long replyId
     );

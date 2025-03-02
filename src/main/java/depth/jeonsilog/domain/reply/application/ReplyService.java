@@ -38,9 +38,7 @@ public class ReplyService {
     private final ReviewService reviewService;
     private final AlarmCreateService alarmService;
 
-    // Description : 댓글 목록 조회
     public ResponseEntity<?> findReplyList(Integer page, Long reviewId) {
-
         Review review = reviewService.validateReviewById(reviewId);
 
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "createdDate"));
@@ -57,28 +55,20 @@ public class ReplyService {
         return ResponseEntity.ok(apiResponse);
     }
 
-    // Description : 댓글 작성
     @Transactional
-    public ResponseEntity<?> createReply(UserPrincipal userPrincipal, ReplyRequestDto.CreateReplyReq createReplyReq) throws IOException {
-
+    public void createReply(UserPrincipal userPrincipal, ReplyRequestDto.CreateReplyReq createReplyReq) throws IOException {
         Review review = reviewService.validateReviewById(createReplyReq.getReviewId());
         User user = userService.validateUserByToken(userPrincipal);
 
         Reply reply = ReplyConverter.toReply(review, user, createReplyReq);
         replyRepository.save(reply);
-
         review.updateNumReply(review.getNumReply() + 1);
 
         alarmService.makeReplyAlarm(reply);
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(Message.builder().message("댓글을 작성했습니다.").build());
-        return ResponseEntity.ok(apiResponse);
     }
 
-    // Description : 댓글 삭제
     @Transactional
-    public ResponseEntity<?> deleteReply(UserPrincipal userPrincipal, Long replyId) {
-
+    public void deleteReply(UserPrincipal userPrincipal, Long replyId) {
         User user = userService.validateUserByToken(userPrincipal);
         Reply reply = validateReplyById(replyId);
         Review review = reply.getReview();
@@ -86,11 +76,7 @@ public class ReplyService {
         DefaultAssert.isTrue(user.equals(reply.getUser()) || user.getRole().equals(Role.ADMIN)
                 , "해당 댓글의 작성자 혹은 관리자만 삭제할 수 있습니다.");
         reply.updateStatus(Status.DELETE);
-
         review.updateNumReply(review.getNumReply() - 1);
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(Message.builder().message("댓글을 삭제했습니다.").build());
-        return ResponseEntity.ok(apiResponse);
     }
 
     // Description : 댓글 존재 여부 조회

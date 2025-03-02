@@ -21,11 +21,11 @@ public interface ReportApi {
 
     @Operation(summary = "감상평, 댓글 혹은 전시회 신고", description = "감상평, 댓글 혹은 포스터 등록 알림 신고입니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "신고 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "201", description = "신고 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "신고 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @PostMapping
-    ResponseEntity<?> report(
+    ResponseEntity<Void> report(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "Schemas의 ReportReq를 참고해주세요", required = true) @RequestBody ReportRequestDto.ReportReq reportReq
     );

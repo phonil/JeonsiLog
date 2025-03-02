@@ -47,22 +47,22 @@ public interface UserApi {
 
     @Operation(summary = "닉네임 변경", description = "본인의 닉네임을 변경합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "변경 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "204", description = "변경 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "변경 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @PatchMapping("/nickname")
-    ResponseEntity<?> changeNickname(
+    ResponseEntity<Void> changeNickname(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "Schemas의 ChangeNicknameReq를 참고해주세요", required = true) @Valid @RequestBody UserRequestDto.ChangeNicknameReq changeNicknameReq
     );
 
     @Operation(summary = "프로필 변경", description = "본인의 프로필을 변경합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "변경 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "204", description = "변경 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "변경 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @PatchMapping(value = "/profile", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    ResponseEntity<?> changeProfile(
+    ResponseEntity<Void> changeProfile(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "프로필 이미지 파일을 입력해주세요.") @RequestPart(value = "img", required = false) MultipartFile img
     ) throws IOException;
@@ -111,11 +111,11 @@ public interface UserApi {
 
     @Operation(summary = "회원 탈퇴", description = "회원이 탈퇴합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "탈퇴 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "204", description = "탈퇴 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "탈퇴 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @DeleteMapping
-    ResponseEntity<?> deleteUser(
+    ResponseEntity<Void> deleteUser(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal
     );
 
@@ -141,11 +141,11 @@ public interface UserApi {
 
     @Operation(summary = "Fcm Token 변경", description = "Fcm Token을 변경합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "변경 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "204", description = "변경 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "변경 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @PatchMapping("/fcm/token")
-    ResponseEntity<?> updateFcmToken(
+    ResponseEntity<Void> updateFcmToken(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "UpdateFcmToken 을 확인해주세요", required = true) @RequestBody UserRequestDto.UpdateFcmToken fcmToken
     );

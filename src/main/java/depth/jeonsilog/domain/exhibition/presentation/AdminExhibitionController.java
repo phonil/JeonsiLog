@@ -19,19 +19,21 @@ public class AdminExhibitionController implements AdminExhibitionApi {
     private final AdminExhibitionService adminExhibitionService;
 
     @PatchMapping
-    public ResponseEntity<?> updateExhibitionDetail(
+    public ResponseEntity<Void> updateExhibitionDetail(
             @CurrentUser UserPrincipal userPrincipal,
             @RequestPart("updateExhibitionDetailReq") ExhibitionRequestDto.UpdateExhibitionDetailReq updateExhibitionDetailReq,
             @RequestPart(value = "img", required = false) MultipartFile img
     ) throws IOException {
-        return adminExhibitionService.updateExhibitionDetail(userPrincipal, updateExhibitionDetailReq, img);
+        adminExhibitionService.updateExhibitionDetail(userPrincipal, updateExhibitionDetailReq, img);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/sequence")
-    public ResponseEntity<?> updateExhibitionSequence(
+    public ResponseEntity<Void> updateExhibitionSequence(
             @CurrentUser UserPrincipal userPrincipal,
             @RequestBody ExhibitionRequestDto.UpdateExhibitionSequenceList requestDto
     ) {
-        return adminExhibitionService.updateExhibitionSequence(userPrincipal, requestDto);
+        adminExhibitionService.updateExhibitionSequence(userPrincipal, requestDto);
+        return ResponseEntity.noContent().build();
     }
 }

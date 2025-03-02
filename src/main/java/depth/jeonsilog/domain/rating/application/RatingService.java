@@ -39,55 +39,42 @@ public class RatingService {
 
     // 별점 등록
     @Transactional
-    public ResponseEntity<?> registerRating(UserPrincipal userPrincipal, RatingRequestDto.RatingReq ratingReq) throws IOException {
+    public void registerRating(UserPrincipal userPrincipal, RatingRequestDto.RatingReq ratingReq) throws IOException {
         User findUser = userService.validateUserByToken(userPrincipal);
         Exhibition exhibition = exhibitionService.validateExhibitionById(ratingReq.getExhibitionId());
 
         Optional<Rating> checkDuplication = ratingRepository.findByUserIdAndExhibitionId(findUser.getId(), exhibition.getId());
         DefaultAssert.isTrue(checkDuplication.isEmpty(), "해당하는 별점이 이미 있습니다.");
-
         Rating rating = RatingConverter.toRating(findUser, exhibition, ratingReq.getRate());
         ratingRepository.save(rating);
 
         Double updateRate = calculateRate(exhibition);
         exhibition.updateRate(updateRate);
-
         alarmService.makeRatingAlarm(rating);
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(Message.builder().message("별점을 등록했습니다.").build());
-        return ResponseEntity.ok(apiResponse);
     }
 
     // 별점 수정
     @Transactional
-    public ResponseEntity<?> updateRating(UserPrincipal userPrincipal, RatingRequestDto.RatingReq ratingReq) {
+    public void updateRating(UserPrincipal userPrincipal, RatingRequestDto.RatingReq ratingReq) {
         User findUser = userService.validateUserByToken(userPrincipal);
         Exhibition exhibition = exhibitionService.validateExhibitionById(ratingReq.getExhibitionId());
 
         Rating findRating = validateRatingByUserIdAndExhibitionId(findUser.getId(), exhibition.getId());
         findRating.updateRate(ratingReq.getRate());
-
         Double updateRate = calculateRate(exhibition);
         exhibition.updateRate(updateRate);
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(Message.builder().message("별점을 수정했습니다.").build());
-        return ResponseEntity.ok(apiResponse);
     }
 
     // 별점 삭제
     @Transactional
-    public ResponseEntity<?> deleteRating(UserPrincipal userPrincipal, Long exhibitionId) {
+    public void deleteRating(UserPrincipal userPrincipal, Long exhibitionId) {
         User findUser = userService.validateUserByToken(userPrincipal);
         Exhibition exhibition = exhibitionService.validateExhibitionById(exhibitionId);
 
         Rating findRating = validateRatingByUserIdAndExhibitionId(findUser.getId(), exhibition.getId());
         ratingRepository.delete(findRating);
-
         Double updateRate = calculateRate(exhibition);
         exhibition.updateRate(updateRate);
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(Message.builder().message("별점을 삭제했습니다.").build());
-        return ResponseEntity.ok(apiResponse);
     }
 
     // 나의 별점 목록 조회

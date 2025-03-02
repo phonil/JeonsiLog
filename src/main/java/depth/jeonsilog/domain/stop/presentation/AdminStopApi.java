@@ -22,11 +22,11 @@ public interface AdminStopApi {
 
     @Operation(summary = "유저 정지", description = "유저를 정지합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "정지 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "201", description = "정지 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "정지 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @PostMapping
-    ResponseEntity<?> stopUser(
+    ResponseEntity<Void> stopUser(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser final UserPrincipal userPrincipal,
             @Parameter(description = "Schemas의 StopUserReq를 참고해주세요.", required = true) @Valid @RequestBody final StopRequestDto.StopUserReq dto
     );

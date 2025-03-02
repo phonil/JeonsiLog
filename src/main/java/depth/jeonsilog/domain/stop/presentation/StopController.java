@@ -25,9 +25,10 @@ public class StopController implements StopApi {
     }
 
     @PatchMapping
-    public ResponseEntity<?> updateIsFirstAccess(
+    public ResponseEntity<Void> updateIsFirstAccess(
             @CurrentUser final UserPrincipal userPrincipal
     ) {
-        return stopService.updateIsFirstAccess(userPrincipal);
+        stopService.updateIsFirstAccess(userPrincipal);
+        return ResponseEntity.noContent().build();
     }
 }

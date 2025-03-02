@@ -32,7 +32,7 @@ public class AdminStopService {
     private final UserService userService;
 
     @Transactional
-    public ResponseEntity<?> stopUser(final UserPrincipal userPrincipal, final StopRequestDto.StopUserReq dto) {
+    public void stopUser(final UserPrincipal userPrincipal, final StopRequestDto.StopUserReq dto) {
         User admin = userService.validateUserByToken(userPrincipal);
         DefaultAssert.isTrue(admin.getRole().equals(Role.ADMIN), "관리자만 유저를 정지할 수 있습니다.");
 
@@ -43,12 +43,8 @@ public class AdminStopService {
                 .user(targetUser.get())
                 .reason(dto.getReason())
                 .build();
-
         Stop entity = stopRepository.save(stop);
         scheduleDeletion(entity.getId(), entity.getCreatedDate());
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(Message.builder().message("유저를 정지했습니다.").build());
-        return ResponseEntity.ok(apiResponse);
     }
 
     private void scheduleDeletion(Long entityId, LocalDateTime createdAt) {

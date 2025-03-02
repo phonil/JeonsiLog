@@ -35,11 +35,11 @@ public interface AdminReportApi {
 
     @Operation(summary = "신고 확인", description = "신고 확인")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "확인 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "204", description = "확인 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "확인 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @PatchMapping("/check")
-    ResponseEntity<?> checkReport(
+    ResponseEntity<Void> checkReport(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "Schemas의 ReportReq를 참고해주세요", required = true) @RequestBody ReportRequestDto.ReportReq reportReq
     );

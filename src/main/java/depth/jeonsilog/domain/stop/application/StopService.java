@@ -45,14 +45,10 @@ public class StopService {
     }
 
     @Transactional
-    public ResponseEntity<?> updateIsFirstAccess(final UserPrincipal userPrincipal) {
+    public void updateIsFirstAccess(final UserPrincipal userPrincipal) {
         User user = userService.validateUserByToken(userPrincipal);
         Optional<Stop> stop = stopRepository.findByUserId(user.getId());
         DefaultAssert.isTrue(stop.isPresent(), "유저 정지 이력이 없습니다.");
-
         stop.get().updateIsFirstAccess();
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(Message.builder().message("정지 후 최초 접속 확인.").build());
-        return ResponseEntity.ok(apiResponse);
     }
 }
