@@ -167,6 +167,12 @@ CREATE TABLE IF NOT EXISTS reply (
 ALTER TABLE `user`
     ADD CONSTRAINT uk_user_nickname UNIQUE (nickname);
 
+ALTER TABLE interest
+    ADD CONSTRAINT uk_interest UNIQUE (user_id, exhibition_id);
+
+ALTER TABLE rating
+    ADD CONSTRAINT uk_rating UNIQUE (user_id, exhibition_id);
+
 ALTER TABLE alarm
     ADD CONSTRAINT fk_alarm_to_user
         FOREIGN KEY (user_id)

@@ -51,7 +51,7 @@ public class Exhibition extends BaseEntity {
     @Column(name = "information", columnDefinition = "TEXT")
     private String information;
 
-    @Column(name = "operating_keyword")
+    @Column(name = "rate")
     private Double rate;
 
     @Column(name = "exhibition_seq", nullable = false)

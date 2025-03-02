@@ -37,7 +37,7 @@ public class User extends BaseEntity {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "email")
+    @Column(name = "profile_img")
     private String profileImg;
 
     // 포토 캘린더 공개 여부
