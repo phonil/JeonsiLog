@@ -17,7 +17,7 @@ public class Token extends BaseEntity {
     private String userEmail;
 
     @Lob
-    @Column(name = "refresh_token", nullable = false)
+    @Column(name = "refresh_token", columnDefinition = "TEXT", nullable = false)
     private String refreshToken;
 
     public Token updateRefreshToken(String refreshToken) {

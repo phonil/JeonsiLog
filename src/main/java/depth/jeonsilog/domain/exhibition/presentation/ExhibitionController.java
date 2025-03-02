@@ -106,7 +106,6 @@ public class ExhibitionController {
     }
 
     // Description : 검색어를 포함한 전시회 목록 조회
-    // TODO : 논의 후 페이징 처리 필요
     @Operation(summary = "검색어를 포함한 전시회 목록 조회", description = "검색어를 포함한 전시회 목록을 조회합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ExhibitionResponseDto.ExhibitionResListWithPaging.class))}),

@@ -26,9 +26,6 @@ public class Alarm extends BaseEntity {
     @Nullable
     private Long senderId;
 
-    @Enumerated(EnumType.STRING)
-    private AlarmType alarmType;
-
     private Long targetId;
 
     private Long clickId;
@@ -38,6 +35,9 @@ public class Alarm extends BaseEntity {
     private String contents;
 
     private Boolean isChecked = false;
+
+    @Enumerated(EnumType.STRING)
+    private AlarmType alarmType;
 
     public void updateIsChecked(Boolean isChecked) {
         this.isChecked = isChecked;

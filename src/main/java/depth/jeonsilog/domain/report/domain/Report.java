@@ -21,15 +21,15 @@ public class Report extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Enumerated(EnumType.STRING)
-    private ReportType reportType;
-
     // 타입별 아이디를 부여하는 것 !!
     private Long reportedId;
 
+    private Integer counting;
+
     private Boolean isChecked = false;
 
-    private Integer counting;
+    @Enumerated(EnumType.STRING)
+    private ReportType reportType;
 
     public void updateChecked (boolean isChecked) {
         this.isChecked = isChecked;

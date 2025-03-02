@@ -41,6 +41,7 @@ public class Exhibition extends BaseEntity {
     private String endDate;
 
     @Lob
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String information;
 
     private Double rate;

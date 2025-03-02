@@ -1,0 +1,29 @@
+#DB 설정
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://jeonsilog-rds-instance.clyo4bxbrojn.ap-northeast-2.rds.amazonaws.com:3306/jeonsi_rds?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: jeonsi
+    password: 2023jeonsi
+
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 5000
+      validation-timeout: 2000
+      minimum-idle: 10
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  #JPA 설정
+  jpa:
+    database-platform:
+    hibernate:
+      ddl-auto: update # create -> validate
+
+    #배포 할 때는 open-in-view false 설정
+    open-in-view: false
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect

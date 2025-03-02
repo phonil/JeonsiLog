@@ -29,6 +29,7 @@ public class Reply extends BaseEntity {
     private Review review;
 
     @Lob
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String contents;
 
     @Builder

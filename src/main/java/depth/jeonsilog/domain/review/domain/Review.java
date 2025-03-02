@@ -29,6 +29,7 @@ public class Review extends BaseEntity {
     private Exhibition exhibition;
 
     @Lob
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String contents;
 
     private Integer numReply;
