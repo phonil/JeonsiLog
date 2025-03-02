@@ -18,13 +18,13 @@ public class Stop extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "reason")
+    @Column(name = "reason", nullable = false)
     private String reason;
 
-    @Column(name = "is_first_access")
+    @Column(name = "is_first_access", nullable = false)
     private Boolean isFirstAccess;
 
     public void updateIsFirstAccess() {

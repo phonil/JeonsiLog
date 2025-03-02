@@ -21,15 +21,15 @@ public class Reply extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "review_id")
+    @JoinColumn(name = "review_id", nullable = false)
     private Review review;
 
     @Lob
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(name = "contents", columnDefinition = "TEXT", nullable = false)
     private String contents;
 
     @Builder

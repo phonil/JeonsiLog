@@ -18,17 +18,21 @@ public class Report extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     // 타입별 아이디를 부여하는 것 !!
+    @Column(name = "reported_id", nullable = false)
     private Long reportedId;
 
+    @Column(name = "counting", nullable = false)
     private Integer counting;
 
+    @Column(name = "is_checked", nullable = false)
     private Boolean isChecked = false;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "report_type", nullable = false)
     private ReportType reportType;
 
     public void updateChecked (boolean isChecked) {

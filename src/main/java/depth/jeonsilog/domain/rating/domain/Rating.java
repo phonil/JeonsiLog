@@ -19,13 +19,14 @@ public class Rating extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "exhibition_id")
+    @JoinColumn(name = "exhibition_id", nullable = false)
     private Exhibition exhibition;
 
+    @Column(name = "rate", nullable = false)
     private Double rate;
 
     public void updateRate(Double rate) {

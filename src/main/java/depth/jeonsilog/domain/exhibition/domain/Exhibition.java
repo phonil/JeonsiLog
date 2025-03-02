@@ -24,32 +24,42 @@ public class Exhibition extends BaseEntity {
     @JoinColumn(name = "place_id")
     private Place place;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "image_url")
     private String imageUrl;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "operating_keyword")
     private OperatingKeyword operatingKeyword;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "price_keyword")
     private PriceKeyword priceKeyword;
 
+    @Column(name = "price")
     private String price;
 
+    @Column(name = "start_date")
     private String startDate;
 
+    @Column(name = "end_date")
     private String endDate;
 
     @Lob
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(name = "information", columnDefinition = "TEXT")
     private String information;
 
+    @Column(name = "operating_keyword")
     private Double rate;
 
+    @Column(name = "exhibition_seq", nullable = false)
     private Integer exhibitionSeq;
 
     @Min(value = 1)
     @Max(value = 11)
+    @Column(name = "sequence", nullable = false)
     private Integer sequence;
 
     // update 메소드

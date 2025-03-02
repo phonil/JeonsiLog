@@ -2,10 +2,7 @@ package depth.jeonsilog.domain.place.domain;
 
 import depth.jeonsilog.domain.common.BaseEntity;
 import depth.jeonsilog.domain.place.dto.PlaceRequestDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,13 +16,17 @@ public class Place extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "address")
     private String address;
 
+    @Column(name = "tel")
     private String tel;
 
+    @Column(name = "home_page")
     private String homePage;
 
     // update 메소드
