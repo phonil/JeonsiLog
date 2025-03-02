@@ -1,15 +1,11 @@
 package depth.jeonsilog.domain.exhibition.presentation;
 
 import depth.jeonsilog.domain.exhibition.application.ExhibitionService;
-import depth.jeonsilog.domain.exhibition.dto.ExhibitionRequestDto;
 import depth.jeonsilog.global.config.security.token.CurrentUser;
 import depth.jeonsilog.global.config.security.token.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @RequiredArgsConstructor
 @RestController
@@ -61,15 +57,6 @@ public class ExhibitionController implements ExhibitionApi {
         return exhibitionService.searchExhibitions(page, searchWord);
     }
 
-    @PatchMapping
-    public ResponseEntity<?> updateExhibitionDetail(
-            @CurrentUser UserPrincipal userPrincipal,
-            @RequestPart("updateExhibitionDetailReq") ExhibitionRequestDto.UpdateExhibitionDetailReq updateExhibitionDetailReq,
-             @RequestPart(value = "img", required = false) MultipartFile img
-            ) throws IOException {
-        return exhibitionService.updateExhibitionDetail(userPrincipal, updateExhibitionDetailReq, img);
-    }
-
     @GetMapping("/poster/{exhibitionId}")
     public ResponseEntity<?> findPoster(
             @PathVariable(value = "exhibitionId") Long exhibitionId
@@ -83,13 +70,5 @@ public class ExhibitionController implements ExhibitionApi {
             @PathVariable String searchWord
     ) {
         return exhibitionService.searchExhibitionsByName(page, searchWord);
-    }
-
-    @PatchMapping("/sequence")
-    public ResponseEntity<?> updateExhibitionSequence(
-            @CurrentUser UserPrincipal userPrincipal,
-            @RequestBody ExhibitionRequestDto.UpdateExhibitionSequenceList requestDto
-    ) {
-        return exhibitionService.updateExhibitionSequence(userPrincipal, requestDto);
     }
 }

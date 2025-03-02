@@ -22,20 +22,4 @@ public class ReportController implements ReportApi {
     ) {
         return reportService.report(userPrincipal, reportReq);
     }
-
-    @GetMapping
-    public ResponseEntity<?> findReportList(
-            @CurrentUser UserPrincipal userPrincipal,
-            @RequestParam(value = "page") Integer page
-    ) {
-        return reportService.findReportList(page, userPrincipal);
-    }
-
-    @PatchMapping("/check")
-    public ResponseEntity<?> checkReport(
-            @CurrentUser UserPrincipal userPrincipal,
-            @RequestBody ReportRequestDto.ReportReq reportReq
-    ) {
-        return reportService.checkReport(userPrincipal, reportReq);
-    }
 }

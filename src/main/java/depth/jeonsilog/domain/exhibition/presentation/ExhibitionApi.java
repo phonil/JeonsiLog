@@ -88,19 +88,6 @@ public interface ExhibitionApi {
             @Parameter(description = "검색어를 입력해주세요.", required = true) @PathVariable(value = "searchWord") String searchWord
     );
 
-    // Description : 관리자
-    @Operation(summary = "전시회 상세 정보 및 전시 공간 정보 수정", description = "전시회 상세 정보 및 전시 공간 정보를 수정합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "수정 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
-            @ApiResponse(responseCode = "400", description = "수정 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
-    })
-    @PatchMapping
-    ResponseEntity<?> updateExhibitionDetail(
-            @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
-            @Parameter(description = "Schemas의 UpdateExhibitionDetailReq와 UpdatePlaceWithExhibitionDetailReq를 참고해주세요", required = true) @RequestPart("updateExhibitionDetailReq") ExhibitionRequestDto.UpdateExhibitionDetailReq updateExhibitionDetailReq,
-            @Parameter(description = "등록할 전시회 포스터 이미지 파일을 입력해주세요.") @RequestPart(value = "img", required = false) MultipartFile img
-    ) throws IOException;
-
     @Operation(summary = "전시회 포스터 조회", description = "전시회 포스터를 조회합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ExhibitionResponseDto.PosterRes.class))}),
@@ -121,17 +108,4 @@ public interface ExhibitionApi {
             @Parameter(description = "검색한 전시회 목록을 페이지별로 조회합니다. **Page는 0부터 시작합니다!**", required = true) @RequestParam(value = "page") Integer page,
             @Parameter(description = "전시회 이름을 입력해주세요.", required = true) @PathVariable String searchWord
     );
-
-    // Description : 관리자
-    @Operation(summary = "전시회 순서 변경", description = "관리자 페이지에서 전시회 순서를 변경합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "수정 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
-            @ApiResponse(responseCode = "400", description = "조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
-    })
-    @PatchMapping("/sequence")
-    ResponseEntity<?> updateExhibitionSequence(
-            @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
-            @Parameter(description = "Schemas의 UpdateExhibitionSequenceList와 UpdateExhibitionSequence를 참고해주세요", required = true) @RequestBody ExhibitionRequestDto.UpdateExhibitionSequenceList requestDto
-    );
-
 }
