@@ -3,7 +3,6 @@ package depth.jeonsilog.domain.exhibition.dto;
 import depth.jeonsilog.domain.exhibition.domain.OperatingKeyword;
 import depth.jeonsilog.domain.exhibition.domain.PriceKeyword;
 import depth.jeonsilog.domain.place.dto.PlaceResponseDto;
-import depth.jeonsilog.domain.reply.dto.ReplyResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;

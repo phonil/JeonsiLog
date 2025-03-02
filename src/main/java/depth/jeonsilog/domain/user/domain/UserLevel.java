@@ -1,7 +1,5 @@
 package depth.jeonsilog.domain.user.domain;
 
-import org.springframework.expression.spel.ast.OpNE;
-
 public enum UserLevel {
 
     NON, // 레벨 없음 : 0개

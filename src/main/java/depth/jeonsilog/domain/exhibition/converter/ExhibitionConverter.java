@@ -3,7 +3,6 @@ package depth.jeonsilog.domain.exhibition.converter;
 import depth.jeonsilog.domain.exhibition.domain.Exhibition;
 import depth.jeonsilog.domain.exhibition.dto.ExhibitionResponseDto;
 import depth.jeonsilog.domain.place.dto.PlaceResponseDto;
-import depth.jeonsilog.domain.reply.dto.ReplyResponseDto;
 import depth.jeonsilog.global.DefaultAssert;
 
 import java.util.ArrayList;

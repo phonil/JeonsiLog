@@ -1,6 +1,5 @@
 package depth.jeonsilog.domain.reply.dto;
 
-import depth.jeonsilog.domain.review.dto.ReviewResponseDto;
 import depth.jeonsilog.domain.user.dto.UserResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

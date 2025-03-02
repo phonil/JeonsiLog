@@ -2,7 +2,10 @@ package depth.jeonsilog.domain.place.domain;
 
 import depth.jeonsilog.domain.common.BaseEntity;
 import depth.jeonsilog.domain.place.dto.PlaceRequestDto;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

@@ -4,7 +4,6 @@ import depth.jeonsilog.domain.reply.domain.Reply;
 import depth.jeonsilog.domain.reply.dto.ReplyRequestDto;
 import depth.jeonsilog.domain.reply.dto.ReplyResponseDto;
 import depth.jeonsilog.domain.review.domain.Review;
-import depth.jeonsilog.domain.review.dto.ReviewResponseDto;
 import depth.jeonsilog.domain.user.domain.User;
 import depth.jeonsilog.domain.user.dto.UserResponseDto;
 

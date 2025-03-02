@@ -1,7 +1,6 @@
 package depth.jeonsilog.domain.review.domain.repository;
 
 import depth.jeonsilog.domain.review.domain.Review;
-import depth.jeonsilog.domain.user.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;

@@ -1,7 +1,6 @@
 package depth.jeonsilog.domain.review.converter;
 
 import depth.jeonsilog.domain.exhibition.domain.Exhibition;
-import depth.jeonsilog.domain.exhibition.dto.ExhibitionResponseDto;
 import depth.jeonsilog.domain.rating.domain.Rating;
 import depth.jeonsilog.domain.rating.domain.repository.RatingRepository;
 import depth.jeonsilog.domain.review.domain.Review;

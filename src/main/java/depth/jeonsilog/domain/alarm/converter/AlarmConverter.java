@@ -4,7 +4,6 @@ import depth.jeonsilog.domain.alarm.domain.Alarm;
 import depth.jeonsilog.domain.alarm.domain.AlarmType;
 import depth.jeonsilog.domain.alarm.dto.AlarmResponseDto;
 import depth.jeonsilog.domain.interest.domain.Interest;
-import depth.jeonsilog.domain.reply.dto.ReplyResponseDto;
 
 import java.util.List;
 

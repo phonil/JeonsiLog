@@ -1,6 +1,5 @@
 package depth.jeonsilog.domain.openApi.application;
 
-import depth.jeonsilog.domain.exhibition.application.ExhibitionService;
 import depth.jeonsilog.domain.exhibition.converter.ExhibitionConverter;
 import depth.jeonsilog.domain.exhibition.domain.Exhibition;
 import depth.jeonsilog.domain.exhibition.domain.OperatingKeyword;

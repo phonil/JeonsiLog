@@ -1,6 +1,8 @@
 package depth.jeonsilog.domain.openApi.dto.API;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.lang.Nullable;
 
 import java.util.ArrayList;

@@ -1,7 +1,6 @@
 package depth.jeonsilog.domain.user.dto;
 
 
-import depth.jeonsilog.domain.user.domain.Role;
 import depth.jeonsilog.domain.user.domain.UserLevel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
