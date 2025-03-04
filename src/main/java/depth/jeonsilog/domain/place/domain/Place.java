@@ -16,13 +16,17 @@ public class Place extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "address")
     private String address;
 
+    @Column(name = "tel")
     private String tel;
 
+    @Column(name = "home_page")
     private String homePage;
 
     // update 메소드

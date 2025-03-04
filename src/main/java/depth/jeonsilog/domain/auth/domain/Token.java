@@ -1,7 +1,10 @@
 package depth.jeonsilog.domain.auth.domain;
 
 import depth.jeonsilog.domain.common.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

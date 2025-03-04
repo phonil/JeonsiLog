@@ -3,9 +3,7 @@ package depth.jeonsilog.domain.follow.converter;
 import depth.jeonsilog.domain.follow.domain.Follow;
 import depth.jeonsilog.domain.follow.domain.repository.FollowRepository;
 import depth.jeonsilog.domain.follow.dto.FollowResponseDto;
-import depth.jeonsilog.domain.reply.dto.ReplyResponseDto;
 import depth.jeonsilog.domain.user.domain.User;
-
 
 import java.util.ArrayList;
 import java.util.List;

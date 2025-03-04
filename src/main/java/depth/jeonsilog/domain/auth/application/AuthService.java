@@ -3,7 +3,9 @@ package depth.jeonsilog.domain.auth.application;
 import depth.jeonsilog.domain.auth.converter.AuthConverter;
 import depth.jeonsilog.domain.auth.domain.Token;
 import depth.jeonsilog.domain.auth.domain.repository.TokenRepository;
-import depth.jeonsilog.domain.auth.dto.*;
+import depth.jeonsilog.domain.auth.dto.AuthRequestDto;
+import depth.jeonsilog.domain.auth.dto.AuthResponseDto;
+import depth.jeonsilog.domain.auth.dto.TokenMapping;
 import depth.jeonsilog.domain.user.application.UserService;
 import depth.jeonsilog.domain.user.domain.User;
 import depth.jeonsilog.domain.user.domain.repository.UserRepository;
@@ -44,38 +46,27 @@ public class AuthService {
     private final UserService userService;
 
     @Transactional
-    public ResponseEntity<?> signUp(AuthRequestDto.SignUpReq signUpReq){
-
+    public void signUp(AuthRequestDto.SignUpReq signUpReq){
         User user = AuthConverter.toUser(signUpReq, passwordEncoder);
         userRepository.save(user);
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(
-                Message.builder().message("회원가입에 성공하였습니다.").build());
-
-        return ResponseEntity.ok(apiResponse);
     }
 
     @Transactional
     public ResponseEntity<?> signIn(AuthRequestDto.SignInReq signInReq){
-
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 signInReq.getEmail(),
                 signInReq.getProviderId()
             )
         );
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         TokenMapping tokenMapping = customTokenProviderService.createToken(authentication);
         Token token = AuthConverter.toToken(tokenMapping);
-
         tokenRepository.save(token);
 
         AuthResponseDto.AuthRes authResponse = AuthConverter.toAuthRes(token, tokenMapping);
-
         ApiResponse apiResponse = ApiResponse.toApiResponse(authResponse);
-        
         return ResponseEntity.ok(apiResponse);
     }
 
@@ -93,9 +84,9 @@ public class AuthService {
         TokenMapping tokenMapping;
 
         Long expirationTime = customTokenProviderService.getExpiration(tokenRefreshRequest.getRefreshToken());
-        if(expirationTime > 0){
+        if(expirationTime > 0) {
             tokenMapping = customTokenProviderService.refreshToken(authentication, token.get().getRefreshToken());
-        }else{
+        } else {
             tokenMapping = customTokenProviderService.createToken(authentication);
         }
 
@@ -103,24 +94,15 @@ public class AuthService {
         tokenRepository.save(updateToken);
 
         AuthResponseDto.AuthRes authResponse = AuthConverter.toAuthRes(updateToken, tokenMapping);
-
         ApiResponse apiResponse = ApiResponse.toApiResponse(authResponse);
-
         return ResponseEntity.ok(apiResponse);
     }
 
     @Transactional
-    public ResponseEntity<?> signout(UserPrincipal userPrincipal) {
-
+    public void signOut(UserPrincipal userPrincipal) {
         Optional<Token> token = tokenRepository.findByUserEmail(userPrincipal.getEmail());
         DefaultAssert.isTrue(token.isPresent(), "이미 로그아웃 되었습니다");
-
         tokenRepository.delete(token.get());
-
-        ApiResponse apiResponse = ApiResponse.toApiResponse(
-                Message.builder().message("로그아웃 되었습니다.").build());
-
-        return ResponseEntity.ok(apiResponse);
     }
 
     public ResponseEntity<?> checkNickname(String nickname) {

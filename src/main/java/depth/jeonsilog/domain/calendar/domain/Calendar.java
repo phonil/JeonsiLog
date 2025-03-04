@@ -20,14 +20,16 @@ public class Calendar extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(name = "photo_date", nullable = false)
     private LocalDate photoDate;
 
-    @Column(length = 2048)
+    @Column(name = "image_url", length = 2048)
     private String imageUrl;
 
+    @Column(name = "caption")
     private String caption;
 
     public void updateImage(String imageUrl) {

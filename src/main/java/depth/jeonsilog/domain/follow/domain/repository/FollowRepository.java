@@ -2,7 +2,6 @@ package depth.jeonsilog.domain.follow.domain.repository;
 
 import depth.jeonsilog.domain.follow.domain.Follow;
 import depth.jeonsilog.domain.user.domain.User;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;

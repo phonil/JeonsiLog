@@ -1,6 +1,5 @@
 package depth.jeonsilog.domain.follow.dto;
 
-import depth.jeonsilog.domain.reply.dto.ReplyResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;

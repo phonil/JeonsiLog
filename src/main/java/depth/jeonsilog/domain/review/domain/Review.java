@@ -21,17 +21,18 @@ public class Review extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "exhibition_id")
+    @JoinColumn(name = "exhibition_id", nullable = false)
     private Exhibition exhibition;
 
     @Lob
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(name = "contents", columnDefinition = "TEXT", nullable = false)
     private String contents;
 
+    @Column(name = "num_reply", nullable = false)
     private Integer numReply;
 
     // update 메소드

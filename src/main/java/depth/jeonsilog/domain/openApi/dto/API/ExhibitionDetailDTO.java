@@ -1,7 +1,5 @@
 package depth.jeonsilog.domain.openApi.dto.API;
 
-import jakarta.persistence.Lob;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;

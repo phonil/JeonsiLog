@@ -27,36 +27,46 @@ public class User extends BaseEntity {
     @Column(name = "user_id")
     private Long id;
 
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(unique = true)
+    @Column(name = "nickname", unique = true, nullable = false)
     private String nickname;
 
     @Email(message = "이메일 형식이어야 합니다.")
+    @Column(name = "email", nullable = false)
     private String email;
 
+    @Column(name = "profile_img")
     private String profileImg;
 
     // 포토 캘린더 공개 여부
+    @Column(name = "is_open", nullable = false)
     private Boolean isOpen;
 
+    @Column(name = "is_recv_exhibition", nullable = false)
     private Boolean isRecvExhibition;
 
+    @Column(name = "is_recv_active", nullable = false)
     private Boolean isRecvActive;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
     private Role role;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "provider", nullable = false)
     private Provider provider;
 
     // 카카오 고유 ID
+    @Column(name = "provider_id", nullable = false)
     private String providerId;
 
-    @Nullable
+    @Column(name = "fcm_token")
     private String fcmToken;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "user_level", nullable = false)
     private UserLevel userLevel;
 
     @OneToMany(mappedBy = "user")

@@ -1,7 +1,6 @@
 package depth.jeonsilog.domain.alarm.dto;
 
 import depth.jeonsilog.domain.alarm.domain.AlarmType;
-import depth.jeonsilog.domain.reply.dto.ReplyResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;

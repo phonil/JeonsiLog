@@ -1,8 +1,6 @@
 package depth.jeonsilog.domain.review.dto;
 
-import depth.jeonsilog.domain.exhibition.dto.ExhibitionResponseDto;
 import depth.jeonsilog.domain.user.domain.UserLevel;
-import depth.jeonsilog.domain.user.dto.UserResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;

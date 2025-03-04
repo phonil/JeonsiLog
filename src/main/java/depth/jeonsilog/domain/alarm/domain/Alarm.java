@@ -19,24 +19,28 @@ public class Alarm extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     // 알림 생성자(송신자)의 유저 id를 저장한다. 전시회 알림에는 필요하지 않기 때문에 Nullable로 설정한다. 추후 리팩토링 가능성 있음
-    @Nullable
+    @Column(name = "sender_id")
     private Long senderId;
 
+    @Column(name = "target_id", nullable = false)
     private Long targetId;
 
+    @Column(name = "click_id", nullable = false)
     private Long clickId;
 
     // 전시회 알림의 내용만 저장한다. (7,3,1일) 나머지 알림은 유저 닉네임의 변경 가능성 때문에 저장하지 않음
-    @Nullable
+    @Column(name = "contents")
     private String contents;
 
+    @Column(name = "is_checked", nullable = false)
     private Boolean isChecked = false;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "alarm_type", nullable = false)
     private AlarmType alarmType;
 
     public void updateIsChecked(Boolean isChecked) {

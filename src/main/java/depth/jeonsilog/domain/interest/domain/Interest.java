@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Getter
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id", "exhibition_id"})
+})
 public class Interest extends BaseEntity {
 
     @Id
@@ -19,11 +22,11 @@ public class Interest extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "exhibition_id")
+    @JoinColumn(name = "exhibition_id", nullable = false)
     private Exhibition exhibition;
 
     @Builder
