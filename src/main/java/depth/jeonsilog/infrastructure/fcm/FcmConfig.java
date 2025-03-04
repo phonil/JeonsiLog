@@ -1,4 +1,4 @@
-package depth.jeonsilog.global.config;
+package depth.jeonsilog.infrastructure.fcm;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;

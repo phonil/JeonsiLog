@@ -1,6 +1,6 @@
-package depth.jeonsilog.domain.openApi.presentation;
+package depth.jeonsilog.infrastructure.openApi.presentation;
 
-import depth.jeonsilog.domain.openApi.application.SaveService;
+import depth.jeonsilog.infrastructure.openApi.application.SaveService;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package depth.jeonsilog.domain.openApi.application;
+package depth.jeonsilog.infrastructure.openApi.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -8,9 +8,9 @@ import depth.jeonsilog.domain.exhibition.domain.Exhibition;
 import depth.jeonsilog.domain.exhibition.domain.OperatingKeyword;
 import depth.jeonsilog.domain.exhibition.domain.PriceKeyword;
 import depth.jeonsilog.domain.exhibition.domain.repository.ExhibitionRepository;
-import depth.jeonsilog.domain.openApi.dto.API.ExhibitionDetailDTO;
-import depth.jeonsilog.domain.openApi.dto.API.ExhibitionListDTO;
-import depth.jeonsilog.domain.openApi.dto.API.PlaceDetailDTO;
+import depth.jeonsilog.infrastructure.openApi.dto.API.ExhibitionDetailDTO;
+import depth.jeonsilog.infrastructure.openApi.dto.API.ExhibitionListDTO;
+import depth.jeonsilog.infrastructure.openApi.dto.API.PlaceDetailDTO;
 import depth.jeonsilog.domain.place.domain.Place;
 import depth.jeonsilog.domain.place.domain.repository.PlaceRepository;
 import depth.jeonsilog.global.payload.ApiResponse;

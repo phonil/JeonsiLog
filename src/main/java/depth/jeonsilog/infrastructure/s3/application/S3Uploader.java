@@ -1,4 +1,4 @@
-package depth.jeonsilog.domain.s3.application;
+package depth.jeonsilog.infrastructure.s3.application;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
@@ -43,7 +43,6 @@ public class S3Uploader {
         String uploadImageUrl = putS3(uploadFile, fileName);
 
         removeNewFile(uploadFile);  // 로컬에 생성된 File 삭제 (MultipartFile -> File 전환 하며 로컬에 파일 생성됨)
-
         return uploadImageUrl;      // 업로드된 파일의 S3 URL 주소 반환
     }
 

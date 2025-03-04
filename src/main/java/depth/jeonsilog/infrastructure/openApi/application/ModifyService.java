@@ -1,4 +1,4 @@
-package depth.jeonsilog.domain.openApi.application;
+package depth.jeonsilog.infrastructure.openApi.application;
 
 import depth.jeonsilog.domain.exhibition.converter.ExhibitionConverter;
 import depth.jeonsilog.domain.exhibition.domain.Exhibition;

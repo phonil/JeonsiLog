@@ -1,4 +1,4 @@
-package depth.jeonsilog.domain.openApi.dto.API;
+package depth.jeonsilog.infrastructure.openApi.dto.API;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
