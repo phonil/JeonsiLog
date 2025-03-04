@@ -32,8 +32,9 @@ public class Calendar extends BaseEntity {
     @Column(name = "caption")
     private String caption;
 
-    public void updateImage(String imageUrl) {
+    public void updateCalendar(String imageUrl, String caption) {
         this.imageUrl = imageUrl;
+        this.caption = caption;
     }
 
     @Builder

@@ -20,7 +20,7 @@ import depth.jeonsilog.domain.user.dto.UserResponseDto;
 import depth.jeonsilog.global.DefaultAssert;
 import depth.jeonsilog.global.config.security.token.UserPrincipal;
 import depth.jeonsilog.global.payload.ApiResponse;
-import depth.jeonsilog.infrastructure.s3.application.S3Uploader;
+import depth.jeonsilog.infrastructure.s3.application.FileUploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -50,7 +50,7 @@ public class UserService {
     private final RatingRepository ratingRepository;
     private final InterestRepository interestRepository;
 
-    private final S3Uploader s3Uploader;
+    private final FileUploader fileUploader;
 
     private static final String DIRNAME = "profile_img";
 
@@ -80,10 +80,9 @@ public class UserService {
     @Transactional
     public void changeProfile(UserPrincipal userPrincipal, MultipartFile img) throws IOException {
         User findUser = validateUserByToken(userPrincipal);
-
         String storedFileName = null;
         if (img != null) {
-            storedFileName = s3Uploader.upload(img, DIRNAME);
+            storedFileName = fileUploader.multipartFileUpload(img, DIRNAME);
         }
         findUser.updateProfileImg(storedFileName);
     }
@@ -142,7 +141,7 @@ public class UserService {
         interestRepository.deleteAll(interests);
 
         // s3에서 프로필 이미지 삭제
-        s3Uploader.deleteImage(DIRNAME, findUser.getProfileImg());
+        fileUploader.deleteFile(findUser.getProfileImg(), DIRNAME);
         userRepository.delete(findUser); // hard delete
 
         Optional<Token> token = tokenRepository.findByUserEmail(userPrincipal.getEmail());

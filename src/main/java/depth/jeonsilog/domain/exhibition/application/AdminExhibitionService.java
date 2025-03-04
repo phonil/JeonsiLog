@@ -9,7 +9,7 @@ import depth.jeonsilog.domain.user.domain.Role;
 import depth.jeonsilog.domain.user.domain.User;
 import depth.jeonsilog.global.DefaultAssert;
 import depth.jeonsilog.global.config.security.token.UserPrincipal;
-import depth.jeonsilog.infrastructure.s3.application.S3Uploader;
+import depth.jeonsilog.infrastructure.s3.application.FileUploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,9 +28,9 @@ public class AdminExhibitionService {
 
     private final ExhibitionRepository exhibitionRepository;
 
+    private final FileUploader fileUploader;
     private final ExhibitionService exhibitionService;
     private final UserService userService;
-    private final S3Uploader s3Uploader;
 
     private static final String DIRNAME = "exhibition_img";
 
@@ -42,11 +42,9 @@ public class AdminExhibitionService {
 
         String storedFileName = null;
         if (updateExhibitionDetailReq.getIsImageChange()) { // 이미지를 변경하는 경우
-            if (img != null) { // 이미지 삭제가 아닌 이미지를 변경하거나 추가하는 경우
-                storedFileName = s3Uploader.upload(img, DIRNAME);
-            }
-            // 기존 포스터 이미지가 s3에 있으면, 이미지 삭제 / 없으면(OPEN API 포스터 이미지 or NULL의 경우) 말고
-            s3Uploader.deleteImage(DIRNAME, exhibition.getImageUrl());
+            if (img != null)  // 이미지 삭제가 아닌 이미지를 변경하거나 추가하는 경우
+                storedFileName = fileUploader.multipartFileUpload(img, DIRNAME);
+            fileUploader.deleteFile(exhibition.getImageUrl(), DIRNAME);
         }
 
         exhibition.updateExhibitionDetail(updateExhibitionDetailReq, storedFileName);
