@@ -13,10 +13,7 @@ import depth.jeonsilog.domain.user.application.UserService;
 import depth.jeonsilog.domain.user.domain.User;
 import depth.jeonsilog.global.DefaultAssert;
 import depth.jeonsilog.global.config.security.token.UserPrincipal;
-import depth.jeonsilog.global.payload.ApiResponse;
-import depth.jeonsilog.global.payload.Message;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

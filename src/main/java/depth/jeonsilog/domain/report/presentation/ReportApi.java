@@ -1,11 +1,9 @@
 package depth.jeonsilog.domain.report.presentation;
 
 import depth.jeonsilog.domain.report.dto.ReportRequestDto;
-import depth.jeonsilog.domain.report.dto.ReportResponseDto;
 import depth.jeonsilog.global.config.security.token.CurrentUser;
 import depth.jeonsilog.global.config.security.token.UserPrincipal;
 import depth.jeonsilog.global.payload.ErrorResponse;
-import depth.jeonsilog.global.payload.Message;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,7 +12,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "Report API", description = "Report 관련 API입니다.")
 public interface ReportApi {
