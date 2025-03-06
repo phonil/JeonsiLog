@@ -1,4 +1,4 @@
-package depth.jeonsilog.domain.fcm.application;
+package depth.jeonsilog.infrastructure.fcm.application;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import lombok.RequiredArgsConstructor;

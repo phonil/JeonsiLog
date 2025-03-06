@@ -5,13 +5,12 @@ import depth.jeonsilog.domain.calendar.domain.Calendar;
 import depth.jeonsilog.domain.calendar.domain.repository.CalendarRepository;
 import depth.jeonsilog.domain.calendar.dto.CalendarRequestDto;
 import depth.jeonsilog.domain.calendar.dto.CalendarResponseDto;
-import depth.jeonsilog.domain.s3.application.S3Uploader;
 import depth.jeonsilog.domain.user.application.UserService;
 import depth.jeonsilog.domain.user.domain.User;
-import depth.jeonsilog.global.DefaultAssert;
 import depth.jeonsilog.global.config.security.token.UserPrincipal;
 import depth.jeonsilog.global.payload.ApiResponse;
-import depth.jeonsilog.global.payload.Message;
+import depth.jeonsilog.infrastructure.s3.application.FileUploader;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,53 +30,51 @@ public class CalendarService {
 
     private final CalendarRepository calendarRepository;
 
+    private final FileUploader fileUploader;
     private final UserService userService;
-    private final S3Uploader s3Uploader;
 
     private static final String DIRNAME = "calendar_img";
 
     @Transactional
     public void uploadImage(UserPrincipal userPrincipal, CalendarRequestDto.UploadImageReq uploadImageReq, MultipartFile img) throws IOException {
         User findUser = userService.validateUserByToken(userPrincipal);
+        if (img.isEmpty())
+            return;
 
-        if (!img.isEmpty()) {
-            String storedFileName = s3Uploader.upload(img, DIRNAME);
-
-            Optional<Calendar> checkCalendar = calendarRepository.findByUserAndPhotoDate(findUser, uploadImageReq.getDate());
-            if (checkCalendar.isPresent()) {
-                Calendar calendar = checkCalendar.get();
-                s3Uploader.deleteImage(DIRNAME, calendar.getImageUrl());
-                calendar.updateImage(storedFileName);
-            } else {
-                Calendar calendar = CalendarConverter.toCalendar(findUser, uploadImageReq.getDate(), storedFileName, uploadImageReq.getCaption());
-                calendarRepository.save(calendar);
-            }
-        }
+        String storedFileName = fileUploader.multipartFileUpload(img, DIRNAME);
+        calendarRepository.findByUserAndPhotoDate(findUser, uploadImageReq.getDate())
+                .ifPresentOrElse(
+                        calendar -> {
+                            fileUploader.deleteFile(calendar.getImageUrl(), DIRNAME);
+                            calendar.updateCalendar(storedFileName, uploadImageReq.getCaption());
+                        },
+                        () -> {
+                            Calendar newCalendar = CalendarConverter.toCalendar(findUser, uploadImageReq.getDate(), storedFileName, uploadImageReq.getCaption());
+                            calendarRepository.save(newCalendar);
+                        }
+                );
     }
 
     @Transactional
     public void uploadPoster(UserPrincipal userPrincipal, CalendarRequestDto.UploadPosterReq uploadPosterReq) {
         User findUser = userService.validateUserByToken(userPrincipal);
-
-        Optional<Calendar> checkCalendar = calendarRepository.findByUserAndPhotoDate(findUser, uploadPosterReq.getDate());
-        if (checkCalendar.isPresent()) {
-            checkCalendar.get().updateImage(uploadPosterReq.getImgUrl());
-        } else {
-            Calendar calendar = CalendarConverter.toCalendar(findUser, uploadPosterReq.getDate(), uploadPosterReq.getImgUrl(), uploadPosterReq.getCaption());
-            calendarRepository.save(calendar);
-        }
+        calendarRepository.findByUserAndPhotoDate(findUser, uploadPosterReq.getDate())
+                .ifPresentOrElse(
+                        calendar -> calendar.updateCalendar(uploadPosterReq.getImgUrl(), uploadPosterReq.getCaption()),
+                        () -> {
+                            Calendar newCalendar = CalendarConverter.toCalendar(findUser, uploadPosterReq.getDate(), uploadPosterReq.getImgUrl(), uploadPosterReq.getCaption());
+                            calendarRepository.save(newCalendar);
+                        }
+                );
     }
 
     @Transactional
     public void deleteCalendar(UserPrincipal userPrincipal, CalendarRequestDto.UploadImageReq deleteImageReq) {
         User findUser = userService.validateUserByToken(userPrincipal);
+        Calendar calendar = calendarRepository.findByUserAndPhotoDate(findUser, deleteImageReq.getDate())
+                .orElseThrow(() -> new EntityNotFoundException("해당 날짜에 이미지가 없습니다."));
 
-        Optional<Calendar> findCalendar = calendarRepository.findByUserAndPhotoDate(findUser, deleteImageReq.getDate());
-        DefaultAssert.isTrue(findCalendar.isPresent(), "해당 날짜에 이미지가 없습니다.");
-
-        Calendar calendar = findCalendar.get();
-
-        s3Uploader.deleteImage(DIRNAME, calendar.getImageUrl());
+        fileUploader.deleteFile(calendar.getImageUrl(), DIRNAME);
         calendarRepository.delete(calendar);
     }
 
@@ -97,9 +94,7 @@ public class CalendarService {
         List<Calendar> calendarList = calendarRepository.findAllByUserAndPhotoDateBetween(findUser, startDate, endDate);
 
         List<CalendarResponseDto.ImageRes> calendarListRes = CalendarConverter.toImageRes(calendarList);
-
         calendarListRes.sort(Comparator.comparing(CalendarResponseDto.ImageRes::getDate));
-
         ApiResponse apiResponse = ApiResponse.toApiResponse(calendarListRes);
         return ResponseEntity.ok(apiResponse);
     }
@@ -120,9 +115,7 @@ public class CalendarService {
         List<Calendar> calendarList = calendarRepository.findAllByUserAndPhotoDateBetween(findUser, startDate, endDate);
 
         List<CalendarResponseDto.ImageRes> calendarListRes = CalendarConverter.toImageRes(calendarList);
-
         calendarListRes.sort(Comparator.comparing(CalendarResponseDto.ImageRes::getDate));
-
         ApiResponse apiResponse = ApiResponse.toApiResponse(calendarListRes);
         return ResponseEntity.ok(apiResponse);
     }

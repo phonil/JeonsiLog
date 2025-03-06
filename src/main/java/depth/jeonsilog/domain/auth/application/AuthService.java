@@ -12,7 +12,6 @@ import depth.jeonsilog.domain.user.domain.repository.UserRepository;
 import depth.jeonsilog.global.DefaultAssert;
 import depth.jeonsilog.global.config.security.token.UserPrincipal;
 import depth.jeonsilog.global.payload.ApiResponse;
-import depth.jeonsilog.global.payload.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;

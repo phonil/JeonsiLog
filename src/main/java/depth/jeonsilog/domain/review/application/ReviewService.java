@@ -23,7 +23,6 @@ import depth.jeonsilog.domain.user.dto.UserResponseDto;
 import depth.jeonsilog.global.DefaultAssert;
 import depth.jeonsilog.global.config.security.token.UserPrincipal;
 import depth.jeonsilog.global.payload.ApiResponse;
-import depth.jeonsilog.global.payload.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
