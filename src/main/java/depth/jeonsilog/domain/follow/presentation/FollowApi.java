@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @Tag(name = "Follow API", description = "Follow 관련 API입니다.")
 public interface FollowApi {
@@ -54,13 +55,12 @@ public interface FollowApi {
 
     @Operation(summary = "나의 팔로잉 목록 조회", description = "나의 팔로잉 목록을 조회합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = FollowResponseDto.MyFollowingListResWithPaging.class))}),
+            @ApiResponse(responseCode = "200", description = "조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = FollowResponseDto.MyFollowingListRes.class))}),
             @ApiResponse(responseCode = "400", description = "조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @GetMapping("/following")
     ResponseEntity<?> findMyFollowingList(
-            @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
-            @Parameter(description = "나의 팔로잉 목록을 페이지별로 조회합니다. **Page는 0부터 시작합니다!**", required = true) @RequestParam(value = "page") Integer page
+            @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal
     );
 
     @Operation(summary = "나의 팔로워 목록 조회", description = "나의 팔로워 목록을 조회합니다.")
@@ -70,8 +70,7 @@ public interface FollowApi {
     })
     @GetMapping("/follower")
     ResponseEntity<?> findMyFollowerList(
-            @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
-            @Parameter(description = "나의 팔로워 목록을 페이지별로 조회합니다. **Page는 0부터 시작합니다!**", required = true) @RequestParam(value = "page") Integer page
+            @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal
     );
 
     @Operation(summary = "타 유저 팔로잉 목록 조회", description = "타 유저의 팔로잉 목록을 조회합니다.")
@@ -82,19 +81,17 @@ public interface FollowApi {
     @GetMapping("/following/{userId}")
     ResponseEntity<?> findUserFollowingList(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
-            @Parameter(description = "타 유저의 팔로잉 목록을 페이지별로 조회합니다. **Page는 0부터 시작합니다!**", required = true) @RequestParam(value = "page") Integer page,
             @Parameter(description = "조회할 유저의 ID를 입력해주세요.", required = true) @PathVariable(value = "userId") Long userId
     );
 
     @Operation(summary = "타 유저 팔로워 목록 조회", description = "타 유저의 팔로워 목록을 조회합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = FollowResponseDto.UserFollowerListResWithPaging.class))}),
+            @ApiResponse(responseCode = "200", description = "조회 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = FollowResponseDto.UserFollowerListRes.class))}),
             @ApiResponse(responseCode = "400", description = "조회 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @GetMapping("/follower/{userId}")
     ResponseEntity<?> findUserFollowerList(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
-            @Parameter(description = "타 유저의 팔로워 목록을 페이지별로 조회합니다. **Page는 0부터 시작합니다!**", required = true) @RequestParam(value = "page") Integer page,
             @Parameter(description = "조회할 유저의 ID를 입력해주세요.", required = true) @PathVariable(value = "userId") Long userId
     );
 

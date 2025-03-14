@@ -46,35 +46,31 @@ public class FollowController implements FollowApi {
 
     @GetMapping("/following")
     public ResponseEntity<?> findMyFollowingList(
-            @CurrentUser UserPrincipal userPrincipal,
-            @RequestParam(value = "page") Integer page
+            @CurrentUser UserPrincipal userPrincipal
     ) {
-        return followService.findMyFollowingList(page, userPrincipal);
+        return followService.findMyFollowingList(userPrincipal);
     }
 
     @GetMapping("/follower")
     public ResponseEntity<?> findMyFollowerList(
-            @CurrentUser UserPrincipal userPrincipal,
-            @RequestParam(value = "page") Integer page
+            @CurrentUser UserPrincipal userPrincipal
     ) {
-        return followService.findMyFollowerList(page, userPrincipal);
+        return followService.findMyFollowerList(userPrincipal);
     }
 
     @GetMapping("/following/{userId}")
     public ResponseEntity<?> findUserFollowingList(
             @CurrentUser UserPrincipal userPrincipal,
-            @RequestParam(value = "page") Integer page,
             @PathVariable(value = "userId") Long userId
     ) {
-        return followService.findUserFollowingList(page, userPrincipal, userId);
+        return followService.findUserFollowingList(userPrincipal, userId);
     }
 
     @GetMapping("/follower/{userId}")
     public ResponseEntity<?> findUserFollowerList(
             @CurrentUser UserPrincipal userPrincipal,
-            Integer page,
             @PathVariable(value = "userId") Long userId
     ) {
-        return followService.findUserFollowerList(page, userPrincipal, userId);
+        return followService.findUserFollowerList(userPrincipal, userId);
     }
 }
