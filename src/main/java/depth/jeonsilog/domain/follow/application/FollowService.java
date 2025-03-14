@@ -70,77 +70,45 @@ public class FollowService {
         followRepository.delete(findFollow.get());
     }
 
-    public ResponseEntity<?> findMyFollowingList(Integer page, UserPrincipal userPrincipal) {
-
+    public ResponseEntity<?> findMyFollowingList(UserPrincipal userPrincipal) {
         User findUser = userService.validateUserByToken(userPrincipal);
-
-        PageRequest pageRequest = PageRequest.of(page, 20, Sort.by(Sort.Direction.ASC, "modifiedDate"));
-        Slice<Follow> followPage = followRepository.findSliceByUser(pageRequest, findUser);
-        List<Follow> followList = followPage.getContent();
-
+        List<Follow> followList = followRepository.findAllByUser(findUser);
         DefaultAssert.isTrue(!followList.isEmpty(), "팔로잉 유저가 존재하지 않습니다.");
 
         List<FollowResponseDto.MyFollowingListRes> followListRes = FollowConverter.toMyFollowingListRes(followList);
-        boolean hasNextPage = followPage.hasNext();
-
-        FollowResponseDto.MyFollowingListResWithPaging myFollowingListResWithPaging = FollowConverter.toMyFollowingListResWithPaging(hasNextPage, followListRes);
-        ApiResponse apiResponse = ApiResponse.toApiResponse(myFollowingListResWithPaging);
+        ApiResponse apiResponse = ApiResponse.toApiResponse(followListRes);
         return ResponseEntity.ok(apiResponse);
     }
 
-    public ResponseEntity<?> findMyFollowerList(Integer page, UserPrincipal userPrincipal) {
-
+    public ResponseEntity<?> findMyFollowerList(UserPrincipal userPrincipal) {
         User findUser = userService.validateUserByToken(userPrincipal);
-
-        PageRequest pageRequest = PageRequest.of(page, 20, Sort.by(Sort.Direction.ASC, "modifiedDate"));
-        Slice<Follow> followPage = followRepository.findSliceByFollow(pageRequest, findUser);
-        List<Follow> followList = followPage.getContent();
-
+        List<Follow> followList = followRepository.findAllByFollow(findUser);
         DefaultAssert.isTrue(!followList.isEmpty(), "팔로워가 존재하지 않습니다.");
 
         List<FollowResponseDto.MyFollowerListRes> followingListRes = FollowConverter.toMyFollowerListRes(followList, followRepository);
-        boolean hasNextPage = followPage.hasNext();
-
-        FollowResponseDto.MyFollowerListResWithPaging myFollowerListResWithPaging = FollowConverter.toMyFollowerListResWithPaging(hasNextPage, followingListRes);
-        ApiResponse apiResponse = ApiResponse.toApiResponse(myFollowerListResWithPaging);
+        ApiResponse apiResponse = ApiResponse.toApiResponse(followingListRes);
         return ResponseEntity.ok(apiResponse);
     }
 
-    public ResponseEntity<?> findUserFollowingList(Integer page, UserPrincipal userPrincipal, Long userId) {
-
+    public ResponseEntity<?> findUserFollowingList(UserPrincipal userPrincipal, Long userId) {
         User me = userService.validateUserByToken(userPrincipal);
         User findUser = userService.validateUserById(userId);
-
-        PageRequest pageRequest = PageRequest.of(page, 20, Sort.by(Sort.Direction.ASC, "modifiedDate"));
-        Slice<Follow> followPage = followRepository.findSliceByUser(pageRequest, findUser);
-        List<Follow> followList = followPage.getContent();
-
+        List<Follow> followList = followRepository.findAllByUser(findUser);
         DefaultAssert.isTrue(!followList.isEmpty(), "팔로잉 유저가 존재하지 않습니다.");
 
         List<FollowResponseDto.UserFollowingListRes> followListRes = FollowConverter.toUserFollowingListRes(me, followList, followRepository);
-        boolean hasNextPage = followPage.hasNext();
-
-        FollowResponseDto.UserFollowingListResWithPaging userFollowingListResWithPaging = FollowConverter.toUserFollowingListResWithPaging(hasNextPage, followListRes);
-        ApiResponse apiResponse = ApiResponse.toApiResponse(userFollowingListResWithPaging);
+        ApiResponse apiResponse = ApiResponse.toApiResponse(followListRes);
         return ResponseEntity.ok(apiResponse);
     }
 
-    public ResponseEntity<?> findUserFollowerList(Integer page, UserPrincipal userPrincipal, Long userId) {
-
+    public ResponseEntity<?> findUserFollowerList(UserPrincipal userPrincipal, Long userId) {
         User me = userService.validateUserByToken(userPrincipal);
         User findUser = userService.validateUserById(userId);
-
-        PageRequest pageRequest = PageRequest.of(page, 20, Sort.by(Sort.Direction.ASC, "modifiedDate"));
-        Slice<Follow> followPage = followRepository.findSliceByFollow(pageRequest, findUser);
-        List<Follow> followList = followPage.getContent();
-
+        List<Follow> followList = followRepository.findAllByFollow(findUser);
         DefaultAssert.isTrue(!followList.isEmpty(), "팔로워가 존재하지 않습니다.");
 
         List<FollowResponseDto.UserFollowerListRes> followingListRes = FollowConverter.toUserFollowerListRes(me, followList, followRepository);
-        boolean hasNextPage = followPage.hasNext();
-
-        FollowResponseDto.UserFollowerListResWithPaging userFollowerListResWithPaging = FollowConverter.toUserFollowerListResWithPaging(hasNextPage, followingListRes);
-        ApiResponse apiResponse = ApiResponse.toApiResponse(userFollowerListResWithPaging);
+        ApiResponse apiResponse = ApiResponse.toApiResponse(followingListRes);
         return ResponseEntity.ok(apiResponse);
     }
 }

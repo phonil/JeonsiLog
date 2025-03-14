@@ -11,7 +11,6 @@ public class FollowResponseDto {
     @Data
     @Builder
     public static class MyFollowingListRes {
-
         @Schema(type = "long", example = "1", description = "팔로우 유저의 ID를 출력합니다.")
         private Long followUserId;
 
@@ -20,16 +19,6 @@ public class FollowResponseDto {
 
         @Schema(type = "string", example = "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg", description = "프로필 이미지 url을 출력합니다.")
         private String profileImgUrl;
-    }
-
-    @Data
-    @Builder
-    public static class MyFollowingListResWithPaging {
-
-        @Schema(type = "boolean", example = "true", description = "다음 페이지 존재 여부를 반환합니다.")
-        private boolean hasNextPage;
-
-        private List<FollowResponseDto.MyFollowingListRes> data;
     }
 
     @Data
@@ -52,10 +41,6 @@ public class FollowResponseDto {
     @Data
     @Builder
     public static class MyFollowerListResWithPaging {
-
-        @Schema(type = "boolean", example = "true", description = "다음 페이지 존재 여부를 반환합니다.")
-        private boolean hasNextPage;
-
         private List<FollowResponseDto.MyFollowerListRes> data;
     }
 
@@ -107,15 +92,5 @@ public class FollowResponseDto {
 
         @Schema(type = "boolean", example = "true", description = "이 유저가 나를 팔로우하고 있는지 출력합니다.")
         private boolean isFollowMe;
-    }
-
-    @Data
-    @Builder
-    public static class UserFollowerListResWithPaging {
-
-        @Schema(type = "boolean", example = "true", description = "다음 페이지 존재 여부를 반환합니다.")
-        private boolean hasNextPage;
-
-        private List<FollowResponseDto.UserFollowerListRes> data;
     }
 }
