@@ -19,7 +19,6 @@ public class PlaceDetailDTO {
     @Getter
     @NoArgsConstructor
     public static class PlaceDetailResponseDTO {
-
         @Nullable
         private PlaceDetailMsgBodyDTO msgBody;
 
@@ -27,34 +26,24 @@ public class PlaceDetailDTO {
         @Setter
         @NoArgsConstructor
         public static class PlaceDetailMsgBodyDTO {
-
             private Integer seq;
-
             @Nullable
             private PlaceInfo placeInfo;
 
             @Getter
+            @Setter
             @NoArgsConstructor
             public static class PlaceInfo {
-
                 private Integer seq;
-
                 // place - name
                 private String culName;
-
                 // place - address
                 private String culAddr;
-
                 // place - tel
                 private String culTel;
-
                 // place - homePage
                 private String culHomeUrl;
-
             }
-
         }
-
     }
-
 }

@@ -6,12 +6,12 @@ import lombok.ToString;
 import org.springframework.lang.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @ToString
 @Getter
 @NoArgsConstructor
 public class ExhibitionListDTO {
-
     /** 참고
      * https://velog.io/@zooneon/Java-ObjectMapper%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-JSON-%ED%8C%8C%EC%8B%B1%ED%95%98%EA%B8%B0
      */
@@ -32,7 +32,7 @@ public class ExhibitionListDTO {
             private Integer cPage;
             private Integer rows;
             @Nullable
-            private ArrayList<PerformElement> perforList = new ArrayList<>();
+            private List<PerformElement> perforList = new ArrayList<>();
 
             @Getter
             @NoArgsConstructor

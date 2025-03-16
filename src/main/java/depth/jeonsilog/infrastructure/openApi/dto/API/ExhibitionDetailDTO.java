@@ -2,6 +2,7 @@ package depth.jeonsilog.infrastructure.openApi.dto.API;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.lang.Nullable;
 
@@ -18,40 +19,28 @@ public class ExhibitionDetailDTO {
     @Getter
     @NoArgsConstructor
     public static class ExhibitionDetailResponseDTO {
-
         @Nullable
         private ExhibitionDetailMsgBodyDTO msgBody;
 
         @Getter
         @NoArgsConstructor
         public static class ExhibitionDetailMsgBodyDTO {
-
             private Integer seq;
-
             @Nullable
             private PerformanceInfo perforInfo;
 
             @Getter
+            @Setter
             @NoArgsConstructor
             public static class PerformanceInfo {
-
                 private Integer seq;
-
                 private String title;
-
                 private String startDate;
-
                 private String endDate;
-
                 private String price;
-
                 private Integer placeSeq;
-
                 private String imgUrl;
-
             }
-
         }
-
     }
 }

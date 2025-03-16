@@ -16,4 +16,6 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
     Optional<Place> findByAddress(String placeAddr);
 
     Slice<Place> findSliceByNameContainingOrAddressContaining(Pageable pageable, String searchWord, String searchWord2);
+
+    Optional<Place> findBySeq(Integer seq);
 }
