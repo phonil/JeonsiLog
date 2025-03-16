@@ -1,5 +1,6 @@
 package depth.jeonsilog.global.error;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import depth.jeonsilog.global.payload.ApiResponse;
 import depth.jeonsilog.global.payload.ErrorCode;
 import depth.jeonsilog.global.payload.ErrorResponse;
@@ -18,7 +19,6 @@ public class ApiControllerAdvice {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     protected ResponseEntity<?> handleHttpRequestMethodNotSupportedException(
             HttpRequestMethodNotSupportedException e) {
-        
         final ErrorResponse response = ErrorResponse
                 .builder()
                 .status(HttpStatus.METHOD_NOT_ALLOWED.value())
@@ -32,7 +32,6 @@ public class ApiControllerAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        
         ErrorResponse response = ErrorResponse
                 .builder()
                 .status(HttpStatus.METHOD_NOT_ALLOWED.value())
@@ -41,8 +40,7 @@ public class ApiControllerAdvice {
                 .message(e.toString())
                 .fieldErrors(e.getFieldErrors())
                 .build();
-
-        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response).build();        
+        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response).build();
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
@@ -56,30 +54,25 @@ public class ApiControllerAdvice {
                 .message(e.toString())
                 .fieldErrors(e.getFieldErrors())
                 .build();
-        
         ApiResponse apiResponse = ApiResponse.builder().check(false).information(response).build();
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @ExceptionHandler(DefaultException.class)
     protected ResponseEntity<?> handleDefaultException(DefaultException e) {
-        
         ErrorCode errorCode = e.getErrorCode();
-
         ErrorResponse response = ErrorResponse
                 .builder()
                 .status(errorCode.getStatus())
                 .code(errorCode.getCode())
                 .message(e.toString())
                 .build();
-        
-        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response).build();        
+        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response).build();
         return new ResponseEntity<>(apiResponse, HttpStatus.resolve(errorCode.getStatus()));
     }
 
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<?> handleException(Exception e) {
-        
         ErrorResponse response = ErrorResponse
                 .builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
@@ -91,7 +84,6 @@ public class ApiControllerAdvice {
 
     @ExceptionHandler(AuthenticationException.class)
     protected ResponseEntity<?> handleAuthenticationException(AuthenticationException e) {
-        
         ErrorResponse response = ErrorResponse
                 .builder()
                 .status(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED.value())
@@ -112,7 +104,6 @@ public class ApiControllerAdvice {
         return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    
     @ExceptionHandler(DefaultNullPointerException.class)
     protected ResponseEntity<?> handleNullPointerException(DefaultNullPointerException e) {
         ErrorResponse response = ErrorResponse
@@ -120,7 +111,17 @@ public class ApiControllerAdvice {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message(e.getMessage())
                 .build();
+        ApiResponse apiResponse = ApiResponse.builder().check(false).information(response).build();
+        return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
+    @ExceptionHandler(JsonProcessingException.class)
+    protected ResponseEntity<?> handleJsonProcessingException(JsonProcessingException e) {
+        ErrorResponse response = ErrorResponse
+                .builder()
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .message(e.getMessage())
+                .build();
         ApiResponse apiResponse = ApiResponse.builder().check(false).information(response).build();
         return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
