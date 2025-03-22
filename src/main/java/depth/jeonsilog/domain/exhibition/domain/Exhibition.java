@@ -54,7 +54,7 @@ public class Exhibition extends BaseEntity {
     @Column(name = "rate")
     private Double rate;
 
-    @Column(name = "exhibition_seq", nullable = false)
+    @Column(name = "exhibition_seq", unique = true, nullable = false)
     private Integer exhibitionSeq;
 
     @Min(value = 1)

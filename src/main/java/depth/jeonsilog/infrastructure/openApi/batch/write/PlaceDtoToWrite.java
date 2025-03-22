@@ -1,11 +1,9 @@
 package depth.jeonsilog.infrastructure.openApi.batch.write;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Builder
 public class PlaceDtoToWrite {
     private Integer seq;

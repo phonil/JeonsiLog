@@ -17,6 +17,9 @@ public class Place extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "seq", unique = true)
+    private Integer seq;
+
     @Column(name = "name")
     private String name;
 
@@ -46,8 +49,9 @@ public class Place extends BaseEntity {
     }
 
     @Builder
-    public Place(Long id, String name, String address, String tel, String homePage) {
+    public Place(Long id, Integer seq, String name, String address, String tel, String homePage) {
         this.id = id;
+        this.seq = seq;
         this.name = name;
         this.address = address;
         this.tel = tel;

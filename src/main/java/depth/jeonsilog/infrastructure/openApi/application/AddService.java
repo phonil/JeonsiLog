@@ -65,7 +65,7 @@ public class AddService {
             // String 타입 XML 받아오기
             String listXml = "";
             try {
-                listXml = saveService.callExhibitionListApi(page, threeMonthsAgoStr, oneMonthsAfterStr);
+                listXml = saveService.callExhibitionListApi(page, "20250305", "20250314");
             } catch (IOException e) {
                 e.printStackTrace();
             }

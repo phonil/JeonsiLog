@@ -1,16 +1,18 @@
 package depth.jeonsilog.infrastructure.openApi.batch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import depth.jeonsilog.global.aop.MethodTimer;
 import depth.jeonsilog.infrastructure.openApi.DataTypeTransferUtil;
 import depth.jeonsilog.infrastructure.openApi.OpenApiCaller;
 import depth.jeonsilog.infrastructure.openApi.dto.API.ExhibitionDetailDTO;
 import depth.jeonsilog.infrastructure.openApi.dto.API.ExhibitionListDTO;
 import depth.jeonsilog.infrastructure.openApi.dto.API.PlaceDetailDTO;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,19 +25,26 @@ public class BatchReader {
     private final ObjectMapper objectMapper;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @MethodTimer
     public List<Integer> readExhibitionList() throws IOException {
-        String fromDate = LocalDate.now().minusMonths(3).format(formatter);
-        String toDate = LocalDate.now().plusMonths(1).format(formatter);
+        String fromDate = "20250305";
+        String toDate = "20250314";
+//        String fromDate = LocalDate.now().minusMonths(3).format(formatter);
+//        String toDate = LocalDate.now().plusMonths(1).format(formatter);
         List<Integer> performanceSeqList = new ArrayList<>();
         // TODO : 호출 횟수 -> 토큰 버킷 이런거? (page 계산, null break 말고 ..)
         Integer page = 1;
         while (true) {
+            logger.info("## Reader ## [Exhibition List Page], {}", page);
             // Description : Exhibition List
             String exhibitionListXml = openApiCaller.callExhibitionListApi(fromDate, toDate, page, 100);
+            logger.info("## Reader ## [Exhibition List Function Call Return ( XML String )], {}", exhibitionListXml);
             String exhibitionListJsonStr = DataTypeTransferUtil.xmlStrToJsonStr(exhibitionListXml);
             ExhibitionListDTO exhibitionList = objectMapper.readValue(exhibitionListJsonStr, ExhibitionListDTO.class);
             // 마지막 페이지 지난 경우
-            if (exhibitionList.getResponse().getMsgBody().getPerforList() == null)
+            if (exhibitionList.getResponse().getMsgBody().getPerforList().isEmpty())
                 break;
             List<ExhibitionListDTO.ExhibitionListResponseDTO.ExhibitionListMsgBodyDTO.PerformElement> performanceList = exhibitionList.getResponse().getMsgBody().getPerforList();
             for (ExhibitionListDTO.ExhibitionListResponseDTO.ExhibitionListMsgBodyDTO.PerformElement performElement : performanceList) {
@@ -47,10 +56,12 @@ public class BatchReader {
         return performanceSeqList;
     }
 
+    @MethodTimer
     public List<ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo> readExhibitionDetail(List<Integer> exhibitionSeqList) throws IOException {
         List<ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo> performanceInfoList = new ArrayList<>();
         for (Integer exhibitionSeq : exhibitionSeqList) {
             String exhibitionDetailXml = openApiCaller.callExhibitionDetailApi(exhibitionSeq);
+            logger.info("## Reader ## [Exhibition Detail Function Call Return ( XML String )], {}", exhibitionDetailXml);
             String exhibitionDetailJsonStr = DataTypeTransferUtil.xmlStrToJsonStr(exhibitionDetailXml);
             ExhibitionDetailDTO exhibitionDetail = objectMapper.readValue(exhibitionDetailJsonStr, ExhibitionDetailDTO.class);
             if (exhibitionDetail.getResponse().getMsgBody().getPerforInfo() == null)
@@ -61,6 +72,7 @@ public class BatchReader {
         return performanceInfoList;
     }
 
+    @MethodTimer
     public List<PlaceDetailDTO.PlaceDetailResponseDTO.PlaceDetailMsgBodyDTO.PlaceInfo> readPlaceDetail(List<ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo> performanceInfoList) throws IOException {
         List<PlaceDetailDTO.PlaceDetailResponseDTO.PlaceDetailMsgBodyDTO.PlaceInfo> placeInfoList = new ArrayList<>();
         for (ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo performanceInfo : performanceInfoList) {
@@ -68,6 +80,7 @@ public class BatchReader {
             if (placeSeq == 0)
                 continue;
             String placeDetailXml = openApiCaller.callPlaceDetailApi(performanceInfo.getPlaceSeq());
+            logger.info("## Reader ## [Place Detail Function Call Return ( XML String )], {}", placeDetailXml);
             String placeDetailJsonStr = DataTypeTransferUtil.xmlStrToJsonStr(placeDetailXml);
             PlaceDetailDTO placeDetail = objectMapper.readValue(placeDetailJsonStr, PlaceDetailDTO.class);
             if (placeDetail.getResponse().getMsgBody().getPlaceInfo() == null)

@@ -32,6 +32,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 
     // XML -> JSON
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
@@ -62,6 +63,8 @@ dependencies {
     // Actuator & Prometheus
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.micrometer:micrometer-registry-prometheus'
+
+//    implementation 'io.opentracing.contrib:opentracing-spring-jaeger-cloud-starter:3.3.1'
 
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

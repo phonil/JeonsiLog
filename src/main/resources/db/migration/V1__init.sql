@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 CREATE TABLE IF NOT EXISTS place (
                                      id                  BIGINT AUTO_INCREMENT                           NOT NULL,
+                                     seq                 INT                                             NULL,
                                      name                VARCHAR(255)                                    NULL,
                                      address             VARCHAR(255)                                    NULL,
                                      tel                 VARCHAR(255)                                    NULL,
@@ -166,6 +167,12 @@ CREATE TABLE IF NOT EXISTS reply (
 
 ALTER TABLE `user`
     ADD CONSTRAINT uk_user_nickname UNIQUE (nickname);
+
+ALTER TABLE place
+    ADD CONSTRAINT uk_place_seq UNIQUE (seq);
+
+ALTER TABLE exhibition
+    ADD CONSTRAINT uk_exhibition_seq UNIQUE (exhibition_seq);
 
 ALTER TABLE interest
     ADD CONSTRAINT uk_interest UNIQUE (user_id, exhibition_id);

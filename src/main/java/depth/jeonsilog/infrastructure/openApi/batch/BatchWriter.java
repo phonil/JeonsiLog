@@ -4,9 +4,12 @@ import depth.jeonsilog.domain.exhibition.domain.Exhibition;
 import depth.jeonsilog.domain.exhibition.domain.repository.ExhibitionRepository;
 import depth.jeonsilog.domain.place.domain.Place;
 import depth.jeonsilog.domain.place.domain.repository.PlaceRepository;
+import depth.jeonsilog.global.aop.MethodTimer;
 import depth.jeonsilog.infrastructure.openApi.batch.write.ExhibitionDtoToWrite;
 import depth.jeonsilog.infrastructure.openApi.batch.write.PlaceDtoToWrite;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,15 +21,18 @@ public class BatchWriter {
 
     private final PlaceRepository placeRepository;
     private final ExhibitionRepository exhibitionRepository;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    @MethodTimer
     public void writePlace(List<PlaceDtoToWrite> placeDtoListToWrite) {
-        // 1) Update 대상 vs Insert 대상 분리(혹은 Upsert)
         for (PlaceDtoToWrite placeDtoToWrite : placeDtoListToWrite) {
             Optional<Place> existingPlace = placeRepository.findBySeq(placeDtoToWrite.getSeq());
-            if (existingPlace.isPresent())
-                updatePlace(existingPlace.get(), placeDtoToWrite);
-            else
-                insertPlace(placeDtoToWrite);
+            logger.info("## Writer ## [Exist Place? (boolean)], {}", existingPlace.isPresent());
+            placeRepository.findBySeq(placeDtoToWrite.getSeq())
+                    .ifPresentOrElse(
+                            place -> updatePlace(place, placeDtoToWrite),
+                            () -> insertPlace(placeDtoToWrite)
+                    );
         }
     }
 
@@ -38,6 +44,7 @@ public class BatchWriter {
 
     private void insertPlace(PlaceDtoToWrite dto) {
         Place newPlace = Place.builder()
+                .seq(dto.getSeq())
                 .name(dto.getName())
                 .address(dto.getAddress())
                 .tel(dto.getTel())
@@ -46,19 +53,22 @@ public class BatchWriter {
         placeRepository.save(newPlace);
     }
 
+    @MethodTimer
     public void writeExhibition(List<ExhibitionDtoToWrite> exhibitionDtoListToWrite) {
         for (ExhibitionDtoToWrite exhibitionDtoToWrite : exhibitionDtoListToWrite) {
             Optional<Exhibition> existingExhibition = exhibitionRepository.findByExhibitionSeq(exhibitionDtoToWrite.getExhibitionSeq());
-            if (existingExhibition.isPresent())
-                updateExhibition(existingExhibition.get(), exhibitionDtoToWrite);
-            else
-                insertExhibition(exhibitionDtoToWrite);
+            logger.info("## Writer ## [Exist Exhibition ? (boolean)], {}", existingExhibition.isPresent());
+            exhibitionRepository.findByExhibitionSeq(exhibitionDtoToWrite.getExhibitionSeq())
+                    .ifPresentOrElse(
+                            exhibition -> updateExhibition(exhibition, exhibitionDtoToWrite),
+                            () -> insertExhibition(exhibitionDtoToWrite)
+                    );
         }
     }
 
-    private void updateExhibition(Exhibition ex, ExhibitionDtoToWrite dto) {
-        ex.updateName(dto.getName());
-        ex.updateOperatingKeyword(dto.getOperatingKeyword());
+    private void updateExhibition(Exhibition exhibition, ExhibitionDtoToWrite dto) {
+        exhibition.updateName(dto.getName());
+        exhibition.updateOperatingKeyword(dto.getOperatingKeyword());
         // etc...
     }
 

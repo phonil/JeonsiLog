@@ -1,5 +1,6 @@
 package depth.jeonsilog.infrastructure.openApi.presentation;
 
+import depth.jeonsilog.global.aop.MethodTimer;
 import depth.jeonsilog.infrastructure.openApi.application.AddService;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ public class AddController {
 
     private final AddService addService;
 
+    @MethodTimer
     @PostMapping
     public ResponseEntity<?> addExhibitionAndPlace() {
         return addService.addExhibitionAndPlace();
