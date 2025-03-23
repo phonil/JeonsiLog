@@ -13,6 +13,7 @@ public class ObjectMapperConfig {
         ObjectMapper objectMapper = new ObjectMapper();
         // JSON의 모든 데이터를 파싱하는 것이 아닌 내가 필요로 하는 데이터만, 즉, 내가 필드로 선언한 데이터들만 파싱할 수 있다
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
         return objectMapper;
     }
 }

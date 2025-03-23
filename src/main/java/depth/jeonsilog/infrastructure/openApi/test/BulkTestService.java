@@ -1,0 +1,28 @@
+package depth.jeonsilog.infrastructure.openApi.test;
+
+import depth.jeonsilog.domain.exhibition.domain.repository.ExhibitionRepository;
+import depth.jeonsilog.domain.place.domain.repository.PlaceRepository;
+import depth.jeonsilog.infrastructure.openApi.batch.write.ExhibitionDtoToWrite;
+import depth.jeonsilog.infrastructure.openApi.batch.write.PlaceDtoToWrite;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@RequiredArgsConstructor
+@Service
+@Transactional
+public class BulkTestService {
+
+    private final PlaceRepository placeRepository;
+    private final ExhibitionRepository exhibitionRepository;
+
+    public void bulkUpsertPlace(List<PlaceDtoToWrite> placeDtoListToWrite) {
+        placeRepository.bulkUpsertJdbcTemplate(placeDtoListToWrite);
+    }
+
+    public void bulkUpsertExhibition(List<ExhibitionDtoToWrite> exhibitionDtoListToWrite) {
+        exhibitionRepository.bulkUpsertJdbcTemplate(exhibitionDtoListToWrite);
+    }
+}

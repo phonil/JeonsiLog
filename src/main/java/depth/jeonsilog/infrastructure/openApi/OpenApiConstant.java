@@ -27,8 +27,8 @@ public final class OpenApiConstant {
         public static final String CALL_PLACE_DETAIL_URL = "http://www.culture.go.kr/openapi/rest/cultureartspaces/d/";
     }
 // =vpM9dG1gBFa1nJ%2FSaFhLRPJyOkMEW8GFDsEeAnNnOoeO2EvHhEBS1zzV7KLLRGD2oMOjj8VOmedb1buxQTUUuA%3D%3D : service 1
-    public static final String SERVICE_KEY_1 = "=6Ga8a1AdpULm31JfcyXxuDvpbDNvSy7AkVUa%2FjvlCpzW%2FtrLitTBq%2FAlbWFJ8YDsZpBeZcdnMdhJzLBl%2ByTxmQ%3D%3D";
-    public static final String SERVICE_KEY_2 = "=vpM9dG1gBFa1nJ%2FSaFhLRPJyOkMEW8GFDsEeAnNnOoeO2EvHhEBS1zzV7KLLRGD2oMOjj8VOmedb1buxQTUUuA%3D%3D";
+    public static final String SERVICE_KEY_2 = "=6Ga8a1AdpULm31JfcyXxuDvpbDNvSy7AkVUa%2FjvlCpzW%2FtrLitTBq%2FAlbWFJ8YDsZpBeZcdnMdhJzLBl%2ByTxmQ%3D%3D";
+    public static final String SERVICE_KEY_1 = "=vpM9dG1gBFa1nJ%2FSaFhLRPJyOkMEW8GFDsEeAnNnOoeO2EvHhEBS1zzV7KLLRGD2oMOjj8VOmedb1buxQTUUuA%3D%3D";
     public static final String ENC = "UTF-8";
     public static final String SEQ_PARAMETER_NAME = "seq";
 

@@ -36,10 +36,10 @@ public class BatchReader {
         List<Integer> performanceSeqList = new ArrayList<>();
         // TODO : 호출 횟수 -> 토큰 버킷 이런거? (page 계산, null break 말고 ..)
         Integer page = 1;
+        int rows = 100;
         while (true) {
             logger.info("## Reader ## [Exhibition List Page], {}", page);
-            // Description : Exhibition List
-            String exhibitionListXml = openApiCaller.callExhibitionListApi(fromDate, toDate, page, 100);
+            String exhibitionListXml = openApiCaller.callExhibitionListApi(fromDate, toDate, page, rows);
             logger.info("## Reader ## [Exhibition List Function Call Return ( XML String )], {}", exhibitionListXml);
             String exhibitionListJsonStr = DataTypeTransferUtil.xmlStrToJsonStr(exhibitionListXml);
             ExhibitionListDTO exhibitionList = objectMapper.readValue(exhibitionListJsonStr, ExhibitionListDTO.class);
@@ -51,6 +51,12 @@ public class BatchReader {
                 if (!performanceSeqList.contains(performElement.getSeq()))
                     performanceSeqList.add(performElement.getSeq());
             }
+//            Integer totalCount = exhibitionList.getResponse().getMsgBody().getTotalCount();
+//            int numOfPages = (totalCount / rows) + 1;
+//            if (totalCount % rows == 0)
+//                numOfPages = (totalCount) / rows;
+//            if (page == numOfPages)
+//                break;
             page++;
         }
         return performanceSeqList;
@@ -59,9 +65,10 @@ public class BatchReader {
     @MethodTimer
     public List<ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo> readExhibitionDetail(List<Integer> exhibitionSeqList) throws IOException {
         List<ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo> performanceInfoList = new ArrayList<>();
+        int i = 1;
         for (Integer exhibitionSeq : exhibitionSeqList) {
             String exhibitionDetailXml = openApiCaller.callExhibitionDetailApi(exhibitionSeq);
-            logger.info("## Reader ## [Exhibition Detail Function Call Return ( XML String )], {}", exhibitionDetailXml);
+            logger.info("## Reader ## [Exhibition Detail Function Call Return ( XML String )], {}", exhibitionDetailXml + i++);
             String exhibitionDetailJsonStr = DataTypeTransferUtil.xmlStrToJsonStr(exhibitionDetailXml);
             ExhibitionDetailDTO exhibitionDetail = objectMapper.readValue(exhibitionDetailJsonStr, ExhibitionDetailDTO.class);
             if (exhibitionDetail.getResponse().getMsgBody().getPerforInfo() == null)
@@ -75,12 +82,13 @@ public class BatchReader {
     @MethodTimer
     public List<PlaceDetailDTO.PlaceDetailResponseDTO.PlaceDetailMsgBodyDTO.PlaceInfo> readPlaceDetail(List<ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo> performanceInfoList) throws IOException {
         List<PlaceDetailDTO.PlaceDetailResponseDTO.PlaceDetailMsgBodyDTO.PlaceInfo> placeInfoList = new ArrayList<>();
+        int i = 1;
         for (ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo performanceInfo : performanceInfoList) {
             Integer placeSeq = performanceInfo.getPlaceSeq();
             if (placeSeq == 0)
                 continue;
             String placeDetailXml = openApiCaller.callPlaceDetailApi(performanceInfo.getPlaceSeq());
-            logger.info("## Reader ## [Place Detail Function Call Return ( XML String )], {}", placeDetailXml);
+            logger.info("## Reader ## [Place Detail Function Call Return ( XML String )], {}", placeDetailXml + i++);
             String placeDetailJsonStr = DataTypeTransferUtil.xmlStrToJsonStr(placeDetailXml);
             PlaceDetailDTO placeDetail = objectMapper.readValue(placeDetailJsonStr, PlaceDetailDTO.class);
             if (placeDetail.getResponse().getMsgBody().getPlaceInfo() == null)

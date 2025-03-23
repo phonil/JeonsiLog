@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ExhibitionDtoToWrite {
+    private Long placeId;
     private Integer placeSeq;
     private String name;
     private String imageUrl;

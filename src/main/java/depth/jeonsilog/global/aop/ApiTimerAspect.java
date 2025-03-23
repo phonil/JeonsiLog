@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 public class ApiTimerAspect {
 
     private final MeterRegistry meterRegistry;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Around("@annotation(MethodTimer)")
     public Object measureMethodCallTime(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -23,6 +26,7 @@ public class ApiTimerAspect {
         String methodName = joinPoint.getSignature().getName();
 
         Timer.Sample sample = Timer.start(meterRegistry);
+//        logger.info("## Method Timer ## [" + methodName + "]: {}", );
         Object result = joinPoint.proceed();
 //        sample.stop(Timer.builder(className + "." + methodName + ".call")
         sample.stop(Timer.builder("method.call")

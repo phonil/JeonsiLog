@@ -46,11 +46,11 @@ public class BatchStep {
         logger.info("####### [Batch Processor ExhibitionToWrite Returned] #######");
 
         logger.info("####### [Batch Writer Place Call] #######");
-        batchWriter.writePlace(placeDtoListToWrite);
+        List<Integer> seqList = batchWriter.writePlace(placeDtoListToWrite);
         logger.info("####### [Batch Writer Place Returned] #######");
 
         logger.info("####### [Batch Writer Exhibition Call] #######");
-        batchWriter.writeExhibition(exhibitionDtoListToWrite);
+        batchWriter.writeExhibition(exhibitionDtoListToWrite, seqList);
         logger.info("####### [Batch Writer Exhibition Returned] #######");
     }
 }

@@ -1,4 +1,4 @@
-package depth.jeonsilog.infrastructure.openApi;
+package depth.jeonsilog.infrastructure.openApi.batch;
 
 import depth.jeonsilog.global.aop.MethodTimer;
 import depth.jeonsilog.infrastructure.openApi.batch.BatchStep;

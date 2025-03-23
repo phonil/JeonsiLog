@@ -4,5 +4,5 @@ spring:
 
 logging:
   level:
-    com.zaxxer.hikari.HikariConfig: DEBUG
+    com.zaxxer.hikari.HikariConfig: INFO
 #    com.zaxxer.hikari: TRACE

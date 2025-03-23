@@ -9,10 +9,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PlaceRepository extends JpaRepository<Place, Long> {
+public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceRepositoryCustom {
 
     Optional<Place> findByName(String placeName);
 
@@ -30,14 +31,15 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
                     "name=VALUES(name), " +
                     "address=VALUES(address), " +
                     "tel=VALUES(tel), " +
-                    "home_page=VALUES(home_page), " +
-                    "modified_date=NOW()",
+                    "home_page=VALUES(home_page)",
             nativeQuery = true)
-    void upsertPlace(
-            @Param("seq") Long seq,
+    void upsert(
+            @Param("seq") Integer seq,
             @Param("name") String name,
             @Param("address") String address,
             @Param("tel") String tel,
             @Param("homePage") String homePage
     );
+
+    List<Place> findBySeqIn(List<Integer> placeSeqList);
 }

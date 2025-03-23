@@ -47,6 +47,29 @@ public class ExhibitionService {
 
     private final UserService userService;
 
+    // Description : 전시회 목록 조회
+    public ResponseEntity<?> findExhibitionList(Integer page) {
+        PageRequest pageRequest = PageRequest.of(page, 15, Sort.by(
+                Sort.Order.asc("sequence"),
+                Sort.Order.asc("createdDate")
+        ));
+        Slice<Exhibition> exhibitionPage = exhibitionRepository.findSliceBy(pageRequest);
+        List<Exhibition> exhibitions = exhibitionPage.getContent();
+
+        List<Place> places = new ArrayList<>();
+        for (Exhibition exhibition : exhibitions) {
+            Place place = exhibition.getPlace();
+            places.add(place);
+        }
+
+        List<PlaceResponseDto.PlaceInfoRes> placeInfoResList = PlaceConverter.toPlaceInfoListRes(places);
+        List<ExhibitionResponseDto.ExhibitionRes> exhibitionResList = ExhibitionConverter.toExhibitionListRes(exhibitions, placeInfoResList);
+        boolean hasNextPage = exhibitionPage.hasNext();
+        ExhibitionResponseDto.ExhibitionResListWithPaging exhibitionResListWithPaging = ExhibitionConverter.toExhibitionResListWithPaging(hasNextPage, exhibitionResList);
+        ApiResponse apiResponse = ApiResponse.toApiResponse(exhibitionResListWithPaging);
+        return ResponseEntity.ok(apiResponse);
+    }
+
     public ResponseEntity<?> findRecentlyExhibitionList(Integer page) {
 
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(

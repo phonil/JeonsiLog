@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ExhibitionRepository extends JpaRepository<Exhibition, Long> {
+public interface ExhibitionRepository extends JpaRepository<Exhibition, Long>, ExhibitionRepositoryCustom {
 
     @EntityGraph(attributePaths = {"place"})
     Slice<Exhibition> findSliceBy(Pageable pageable);
