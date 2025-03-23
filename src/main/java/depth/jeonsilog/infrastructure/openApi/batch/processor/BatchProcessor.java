@@ -1,12 +1,12 @@
-package depth.jeonsilog.infrastructure.openApi.batch;
+package depth.jeonsilog.infrastructure.openApi.batch.processor;
 
 import depth.jeonsilog.domain.exhibition.domain.OperatingKeyword;
 import depth.jeonsilog.domain.exhibition.domain.PriceKeyword;
 import depth.jeonsilog.global.aop.MethodTimer;
 import depth.jeonsilog.infrastructure.openApi.dto.API.ExhibitionDetailDTO;
 import depth.jeonsilog.infrastructure.openApi.dto.API.PlaceDetailDTO;
-import depth.jeonsilog.infrastructure.openApi.batch.write.ExhibitionDtoToWrite;
-import depth.jeonsilog.infrastructure.openApi.batch.write.PlaceDtoToWrite;
+import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.ExhibitionDtoToWrite;
+import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.PlaceDtoToWrite;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

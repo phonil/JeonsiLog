@@ -1,6 +1,6 @@
 package depth.jeonsilog.domain.place.domain.repository;
 
-import depth.jeonsilog.infrastructure.openApi.batch.write.PlaceDtoToWrite;
+import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.PlaceDtoToWrite;
 import depth.jeonsilog.infrastructure.openApi.test.PlaceUpsertRequest;
 
 import java.util.List;

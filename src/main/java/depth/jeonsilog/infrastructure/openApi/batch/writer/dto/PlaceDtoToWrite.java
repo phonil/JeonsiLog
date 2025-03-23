@@ -1,4 +1,4 @@
-package depth.jeonsilog.infrastructure.openApi.batch.write;
+package depth.jeonsilog.infrastructure.openApi.batch.writer.dto;
 
 import lombok.*;
 

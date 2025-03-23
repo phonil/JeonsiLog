@@ -2,8 +2,8 @@ package depth.jeonsilog.infrastructure.openApi.test;
 
 import depth.jeonsilog.domain.exhibition.domain.repository.ExhibitionRepository;
 import depth.jeonsilog.domain.place.domain.repository.PlaceRepository;
-import depth.jeonsilog.infrastructure.openApi.batch.write.ExhibitionDtoToWrite;
-import depth.jeonsilog.infrastructure.openApi.batch.write.PlaceDtoToWrite;
+import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.ExhibitionDtoToWrite;
+import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.PlaceDtoToWrite;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

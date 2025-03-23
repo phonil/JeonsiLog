@@ -1,6 +1,6 @@
 package depth.jeonsilog.domain.exhibition.domain.repository;
 
-import depth.jeonsilog.infrastructure.openApi.batch.write.ExhibitionDtoToWrite;
+import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.ExhibitionDtoToWrite;
 
 import java.util.List;
 

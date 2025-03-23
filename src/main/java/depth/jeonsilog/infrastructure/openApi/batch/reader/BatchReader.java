@@ -1,4 +1,4 @@
-package depth.jeonsilog.infrastructure.openApi.batch;
+package depth.jeonsilog.infrastructure.openApi.batch.reader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import depth.jeonsilog.global.aop.MethodTimer;
@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;

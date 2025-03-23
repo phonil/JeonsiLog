@@ -1,6 +1,6 @@
 package depth.jeonsilog.domain.exhibition.domain.repository;
 
-import depth.jeonsilog.infrastructure.openApi.batch.write.ExhibitionDtoToWrite;
+import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.ExhibitionDtoToWrite;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

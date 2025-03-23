@@ -1,7 +1,7 @@
 package depth.jeonsilog.infrastructure.openApi.test;
 
-import depth.jeonsilog.infrastructure.openApi.batch.write.ExhibitionDtoToWrite;
-import depth.jeonsilog.infrastructure.openApi.batch.write.PlaceDtoToWrite;
+import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.ExhibitionDtoToWrite;
+import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.PlaceDtoToWrite;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
