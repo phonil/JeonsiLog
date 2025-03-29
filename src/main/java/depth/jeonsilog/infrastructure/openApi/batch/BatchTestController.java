@@ -42,6 +42,15 @@ public class BatchTestController {
         return "call success !";
     }
 
+    @MethodTimer
+    @GetMapping("/before")
+    public String beforeDataBatch() throws IOException {
+        logger.info("####### [Before Batch Step Call] #######");
+        batchStep.step();
+        logger.info("####### [Before Batch Step Returned] #######");
+        return "call success !";
+    }
+
     @GetMapping("/exhibition-list-test")
     public void testExhibitionListAsyncWithResult() throws InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(3); // 스레드 3개 고정

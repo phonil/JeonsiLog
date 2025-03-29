@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -21,7 +19,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class BatchReader {
+public class TaskletBatchReader {
 
     private final OpenApiCaller openApiCaller;
     private final ObjectMapper objectMapper;

@@ -3,11 +3,13 @@ package depth.jeonsilog.infrastructure.openApi.batch;
 import depth.jeonsilog.global.aop.MethodTimer;
 import depth.jeonsilog.infrastructure.openApi.batch.processor.BatchProcessor;
 import depth.jeonsilog.infrastructure.openApi.batch.reader.BatchReader;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.TaskletBatchReader;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.BatchWriter;
-import depth.jeonsilog.infrastructure.openApi.dto.API.ExhibitionDetailDTO;
-import depth.jeonsilog.infrastructure.openApi.dto.API.PlaceDetailDTO;
+import depth.jeonsilog.infrastructure.openApi.batch.writer.TaskletBatchWriter;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.ExhibitionDtoToWrite;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.PlaceDtoToWrite;
+import depth.jeonsilog.infrastructure.openApi.dto.API.ExhibitionDetailDTO;
+import depth.jeonsilog.infrastructure.openApi.dto.API.PlaceDetailDTO;
 import lombok.RequiredArgsConstructor;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.slf4j.Logger;
@@ -20,11 +22,11 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class BatchStep {
+public class TaskletBatchStep {
 
-    private final BatchReader batchReader;
+    private final TaskletBatchReader taskletBatchReader;
     private final BatchProcessor batchProcessor;
-    private final BatchWriter batchWriter;
+    private final TaskletBatchWriter taskletBatchWriter;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @MethodTimer
@@ -36,15 +38,15 @@ public class BatchStep {
     )
     public void step() throws IOException {
         logger.info("####### [Batch Reader Exhibition List Call] #######");
-        List<Integer> performanceSeqList = batchReader.readExhibitionList();
+        List<Integer> performanceSeqList = taskletBatchReader.readExhibitionList();
         logger.info("####### [Batch Reader Exhibition List Returned] #######");
 
         logger.info("####### [Batch Reader Exhibition Detail Call] #######");
-        List<ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo> performanceInfoList = batchReader.readExhibitionDetail(performanceSeqList);
+        List<ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo> performanceInfoList = taskletBatchReader.readExhibitionDetail(performanceSeqList);
         logger.info("####### [Batch Reader Exhibition Detail Returned] #######");
 
         logger.info("####### [Batch Reader Place Detail Call] #######");
-        List<PlaceDetailDTO.PlaceDetailResponseDTO.PlaceDetailMsgBodyDTO.PlaceInfo> placeInfoList = batchReader.readPlaceDetail(performanceInfoList);
+        List<PlaceDetailDTO.PlaceDetailResponseDTO.PlaceDetailMsgBodyDTO.PlaceInfo> placeInfoList = taskletBatchReader.readPlaceDetail(performanceInfoList);
         logger.info("####### [Batch Reader Place Detail Returned] #######");
 
         logger.info("####### [Batch Processor PlaceToWrite Call] #######");
@@ -56,11 +58,13 @@ public class BatchStep {
         logger.info("####### [Batch Processor ExhibitionToWrite Returned] #######");
 
         logger.info("####### [Batch Writer Place Call] #######");
-        List<Integer> seqList = batchWriter.writePlace(placeDtoListToWrite);
+//        taskletBatchWriter.writePlace(placeDtoListToWrite);
+        List<Integer> seqList = taskletBatchWriter.writePlaceBulk(placeDtoListToWrite);
         logger.info("####### [Batch Writer Place Returned] #######");
 
         logger.info("####### [Batch Writer Exhibition Call] #######");
-        batchWriter.writeExhibition(exhibitionDtoListToWrite, seqList);
+//        taskletBatchWriter.writeExhibition(exhibitionDtoListToWrite);
+        taskletBatchWriter.writeExhibitionBulk(exhibitionDtoListToWrite, seqList);
         logger.info("####### [Batch Writer Exhibition Returned] #######");
     }
 }
