@@ -1,4 +1,4 @@
-package depth.jeonsilog.infrastructure.openApi.dto.API;
+package depth.jeonsilog.infrastructure.openApi.batch.reader.dto.beforeAPI;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

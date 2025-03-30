@@ -2,14 +2,12 @@ package depth.jeonsilog.infrastructure.openApi.batch;
 
 import depth.jeonsilog.global.aop.MethodTimer;
 import depth.jeonsilog.infrastructure.openApi.batch.processor.BatchProcessor;
-import depth.jeonsilog.infrastructure.openApi.batch.reader.BatchReader;
 import depth.jeonsilog.infrastructure.openApi.batch.reader.TaskletBatchReader;
-import depth.jeonsilog.infrastructure.openApi.batch.writer.BatchWriter;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.TaskletBatchWriter;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.ExhibitionDtoToWrite;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.PlaceDtoToWrite;
-import depth.jeonsilog.infrastructure.openApi.dto.API.ExhibitionDetailDTO;
-import depth.jeonsilog.infrastructure.openApi.dto.API.PlaceDetailDTO;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.beforeAPI.ExhibitionDetailDTO;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.beforeAPI.PlaceDetailDTO;
 import lombok.RequiredArgsConstructor;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.slf4j.Logger;
@@ -58,13 +56,13 @@ public class TaskletBatchStep {
         logger.info("####### [Batch Processor ExhibitionToWrite Returned] #######");
 
         logger.info("####### [Batch Writer Place Call] #######");
-//        taskletBatchWriter.writePlace(placeDtoListToWrite);
-        List<Integer> seqList = taskletBatchWriter.writePlaceBulk(placeDtoListToWrite);
+        taskletBatchWriter.writePlace(placeDtoListToWrite);
+//        List<Integer> seqList = taskletBatchWriter.writePlaceBulk(placeDtoListToWrite);
         logger.info("####### [Batch Writer Place Returned] #######");
 
         logger.info("####### [Batch Writer Exhibition Call] #######");
-//        taskletBatchWriter.writeExhibition(exhibitionDtoListToWrite);
-        taskletBatchWriter.writeExhibitionBulk(exhibitionDtoListToWrite, seqList);
+        taskletBatchWriter.writeExhibition(exhibitionDtoListToWrite);
+//        taskletBatchWriter.writeExhibitionBulk(exhibitionDtoListToWrite, seqList);
         logger.info("####### [Batch Writer Exhibition Returned] #######");
     }
 }

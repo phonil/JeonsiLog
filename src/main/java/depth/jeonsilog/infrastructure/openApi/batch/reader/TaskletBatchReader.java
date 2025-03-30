@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import depth.jeonsilog.global.aop.MethodTimer;
 import depth.jeonsilog.infrastructure.openApi.DataTypeTransferUtil;
 import depth.jeonsilog.infrastructure.openApi.OpenApiCaller;
-import depth.jeonsilog.infrastructure.openApi.dto.API.ExhibitionDetailDTO;
-import depth.jeonsilog.infrastructure.openApi.dto.API.ExhibitionListDTO;
-import depth.jeonsilog.infrastructure.openApi.dto.API.PlaceDetailDTO;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.beforeAPI.ExhibitionDetailDTO;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.beforeAPI.ExhibitionListDTO;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.beforeAPI.PlaceDetailDTO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +29,8 @@ public class TaskletBatchReader {
 
     @MethodTimer
     public List<Integer> readExhibitionList() throws IOException {
-        String fromDate = "20250305";
-        String toDate = "20250314";
+        String fromDate = "20250314";
+        String toDate = "20250331";
 //        String fromDate = LocalDate.now().minusMonths(3).format(formatter);
 //        String toDate = LocalDate.now().plusMonths(1).format(formatter);
         List<Integer> performanceSeqList = new ArrayList<>();

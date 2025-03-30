@@ -1,18 +1,17 @@
 package depth.jeonsilog.infrastructure.openApi.batch;
 
+import depth.jeonsilog.global.aop.BatchLog;
 import depth.jeonsilog.global.aop.MethodTimer;
 import depth.jeonsilog.infrastructure.openApi.batch.processor.BatchProcessor;
 import depth.jeonsilog.infrastructure.openApi.batch.reader.BatchReader;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.BatchWriter;
-import depth.jeonsilog.infrastructure.openApi.dto.API.ExhibitionDetailDTO;
-import depth.jeonsilog.infrastructure.openApi.dto.API.PlaceDetailDTO;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.beforeAPI.ExhibitionDetailDTO;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.beforeAPI.PlaceDetailDTO;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.ExhibitionDtoToWrite;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.PlaceDtoToWrite;
 import lombok.RequiredArgsConstructor;
-import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -27,40 +26,34 @@ public class BatchStep {
     private final BatchWriter batchWriter;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    @BatchLog
     @MethodTimer
-    @Scheduled(cron = "0 0 3 * * *")
-    @SchedulerLock(
-            name = "data_upsert_batch",
-            lockAtLeastFor = "PT1M",
-            lockAtMostFor = "PT5M"
-    )
     public void step() throws IOException {
-        logger.info("####### [Batch Reader Exhibition List Call] #######");
         List<Integer> performanceSeqList = batchReader.readExhibitionList();
-        logger.info("####### [Batch Reader Exhibition List Returned] #######");
 
-        logger.info("####### [Batch Reader Exhibition Detail Call] #######");
-        List<ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo> performanceInfoList = batchReader.readExhibitionDetail(performanceSeqList);
-        logger.info("####### [Batch Reader Exhibition Detail Returned] #######");
+        int chunkSize = 100;
+        int total = performanceSeqList.size();
+        int startIdx = 0;
 
-        logger.info("####### [Batch Reader Place Detail Call] #######");
-        List<PlaceDetailDTO.PlaceDetailResponseDTO.PlaceDetailMsgBodyDTO.PlaceInfo> placeInfoList = batchReader.readPlaceDetail(performanceInfoList);
-        logger.info("####### [Batch Reader Place Detail Returned] #######");
+        while (startIdx < total) {
+            int endIdx = Math.min(startIdx + chunkSize, total);
+            // 1) 이번 chunk의 seq
+            List<Integer> chunkSeqList = performanceSeqList.subList(startIdx, endIdx);
 
-        logger.info("####### [Batch Processor PlaceToWrite Call] #######");
-        List<PlaceDtoToWrite> placeDtoListToWrite = batchProcessor.processPlace(placeInfoList);
-        logger.info("####### [Batch Processor PlaceToWrite Returned] #######");
+            // 2) Read detail for chunk
+            List<ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo> perfInfoList = batchReader.readExhibitionDetail(chunkSeqList);
+            List<PlaceDetailDTO.PlaceDetailResponseDTO.PlaceDetailMsgBodyDTO.PlaceInfo> placeInfoList = batchReader.readPlaceDetail(perfInfoList);
 
-        logger.info("####### [Batch Processor ExhibitionToWrite Call] #######");
-        List<ExhibitionDtoToWrite> exhibitionDtoListToWrite = batchProcessor.processExhibition(performanceInfoList);
-        logger.info("####### [Batch Processor ExhibitionToWrite Returned] #######");
+            // 3) Process
+            List<PlaceDtoToWrite> placeDtoList = batchProcessor.processPlace(placeInfoList);
+            List<ExhibitionDtoToWrite> exhibitDtoList = batchProcessor.processExhibition(perfInfoList);
 
-        logger.info("####### [Batch Writer Place Call] #######");
-        List<Integer> seqList = batchWriter.writePlace(placeDtoListToWrite);
-        logger.info("####### [Batch Writer Place Returned] #######");
+            // 4) Write
+            List<Integer> placeSeqList = batchWriter.writePlace(placeDtoList);
+            batchWriter.writeExhibition(exhibitDtoList, placeSeqList);
 
-        logger.info("####### [Batch Writer Exhibition Call] #######");
-        batchWriter.writeExhibition(exhibitionDtoListToWrite, seqList);
-        logger.info("####### [Batch Writer Exhibition Returned] #######");
+            // 5) move next chunk
+            startIdx = endIdx;
+        }
     }
 }

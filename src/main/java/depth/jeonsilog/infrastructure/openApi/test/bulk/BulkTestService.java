@@ -1,4 +1,4 @@
-package depth.jeonsilog.infrastructure.openApi.test;
+package depth.jeonsilog.infrastructure.openApi.test.bulk;
 
 import depth.jeonsilog.domain.exhibition.domain.repository.ExhibitionRepository;
 import depth.jeonsilog.domain.place.domain.repository.PlaceRepository;

@@ -1,4 +1,4 @@
-package depth.jeonsilog.infrastructure.openApi.test;
+package depth.jeonsilog.infrastructure.openApi.test.bulk;
 
 import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.ExhibitionDtoToWrite;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.PlaceDtoToWrite;

@@ -64,7 +64,7 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs",
-                                "/api-docs/**", "/v3/api-docs/**", "/auth/**", "/actuator/**", "/batch/**", "/api/adds", "/bulk/**")
+                                "/api-docs/**", "/v3/api-docs/**", "/auth/**", "/actuator/**", "/batch/**", "/api/adds", "/bulk/**", "/test/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated());

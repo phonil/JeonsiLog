@@ -1,18 +1,17 @@
 package depth.jeonsilog.infrastructure.openApi.batch.reader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import depth.jeonsilog.global.aop.BatchLog;
 import depth.jeonsilog.global.aop.MethodTimer;
 import depth.jeonsilog.infrastructure.openApi.DataTypeTransferUtil;
 import depth.jeonsilog.infrastructure.openApi.OpenApiCaller;
-import depth.jeonsilog.infrastructure.openApi.dto.API.ExhibitionDetailDTO;
-import depth.jeonsilog.infrastructure.openApi.dto.API.ExhibitionListDTO;
-import depth.jeonsilog.infrastructure.openApi.dto.API.PlaceDetailDTO;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.beforeAPI.ExhibitionDetailDTO;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.beforeAPI.ExhibitionListDTO;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.beforeAPI.PlaceDetailDTO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -29,10 +28,11 @@ public class BatchReader {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    @BatchLog
     @MethodTimer
     public List<Integer> readExhibitionList() throws IOException {
-        String fromDate = "20250305";
-        String toDate = "20250314";
+        String fromDate = "20250314";
+        String toDate = "20250331";
 //        String fromDate = LocalDate.now().minusMonths(3).format(formatter);
 //        String toDate = LocalDate.now().plusMonths(1).format(formatter);
         List<Integer> performanceSeqList = new ArrayList<>();
@@ -57,6 +57,7 @@ public class BatchReader {
         return performanceSeqList;
     }
 
+    @BatchLog
     @MethodTimer
     public List<ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo> readExhibitionDetail(List<Integer> exhibitionSeqList) throws IOException {
         List<ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo> performanceInfoList = new ArrayList<>();
@@ -74,6 +75,7 @@ public class BatchReader {
         return performanceInfoList;
     }
 
+    @BatchLog
     @MethodTimer
     public List<PlaceDetailDTO.PlaceDetailResponseDTO.PlaceDetailMsgBodyDTO.PlaceInfo> readPlaceDetail(List<ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo> performanceInfoList) throws IOException {
         List<PlaceDetailDTO.PlaceDetailResponseDTO.PlaceDetailMsgBodyDTO.PlaceInfo> placeInfoList = new ArrayList<>();

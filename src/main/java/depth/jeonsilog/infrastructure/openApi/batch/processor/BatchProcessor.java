@@ -2,9 +2,10 @@ package depth.jeonsilog.infrastructure.openApi.batch.processor;
 
 import depth.jeonsilog.domain.exhibition.domain.OperatingKeyword;
 import depth.jeonsilog.domain.exhibition.domain.PriceKeyword;
+import depth.jeonsilog.global.aop.BatchLog;
 import depth.jeonsilog.global.aop.MethodTimer;
-import depth.jeonsilog.infrastructure.openApi.dto.API.ExhibitionDetailDTO;
-import depth.jeonsilog.infrastructure.openApi.dto.API.PlaceDetailDTO;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.beforeAPI.ExhibitionDetailDTO;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.beforeAPI.PlaceDetailDTO;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.ExhibitionDtoToWrite;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.PlaceDtoToWrite;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class BatchProcessor {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    @BatchLog
     @MethodTimer
     public List<PlaceDtoToWrite> processPlace(List<PlaceDetailDTO.PlaceDetailResponseDTO.PlaceDetailMsgBodyDTO.PlaceInfo> placeInfoList) {
         List<PlaceDtoToWrite> placeDtoListToWrite = new ArrayList<>();
@@ -62,6 +64,7 @@ public class BatchProcessor {
         return placeDtoListToWrite;
     }
 
+    @BatchLog
     @MethodTimer
     public List<ExhibitionDtoToWrite> processExhibition(List<ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo> performanceInfoList) {
         List<ExhibitionDtoToWrite> exhibitionDtoListToWrite = new ArrayList<>();
