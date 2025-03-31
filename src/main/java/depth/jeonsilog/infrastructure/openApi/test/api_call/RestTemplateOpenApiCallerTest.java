@@ -14,7 +14,7 @@ import static depth.jeonsilog.infrastructure.openApi.OpenApiConstant.CallPlaceDe
 
 @RequiredArgsConstructor
 @Component
-public class OpenApiCallerTest {
+public class RestTemplateOpenApiCallerTest {
     private final RestTemplate restTemplate;
 
     public String callExhibitionListApi(String from, String to, Integer cPage, Integer rows) throws UnsupportedEncodingException {

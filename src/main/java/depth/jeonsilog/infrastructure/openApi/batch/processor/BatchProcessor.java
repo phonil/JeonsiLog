@@ -4,6 +4,8 @@ import depth.jeonsilog.domain.exhibition.domain.OperatingKeyword;
 import depth.jeonsilog.domain.exhibition.domain.PriceKeyword;
 import depth.jeonsilog.global.aop.BatchLog;
 import depth.jeonsilog.global.aop.MethodTimer;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.afterAPI.ChangedExhibitionDetailDTO;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.afterAPI.ChangedPlaceDetailDTO;
 import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.beforeAPI.ExhibitionDetailDTO;
 import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.beforeAPI.PlaceDetailDTO;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.ExhibitionDtoToWrite;
@@ -29,9 +31,9 @@ public class BatchProcessor {
 
     @BatchLog
     @MethodTimer
-    public List<PlaceDtoToWrite> processPlace(List<PlaceDetailDTO.PlaceDetailResponseDTO.PlaceDetailMsgBodyDTO.PlaceInfo> placeInfoList) {
+    public List<PlaceDtoToWrite> processPlace(List<ChangedPlaceDetailDTO.PlaceDetailResponseDTO.PlaceDetailBodyDTO.Items.Item> placeInfoList) {
         List<PlaceDtoToWrite> placeDtoListToWrite = new ArrayList<>();
-        for (PlaceDetailDTO.PlaceDetailResponseDTO.PlaceDetailMsgBodyDTO.PlaceInfo placeInfo : placeInfoList) {
+        for (ChangedPlaceDetailDTO.PlaceDetailResponseDTO.PlaceDetailBodyDTO.Items.Item placeInfo : placeInfoList) {
             logger.info("## Processor ## [Before Processing Place Tel], {}", placeInfo.getCulTel());
             logger.info("## Processor ## [Before Processing Place Homepage], {}", placeInfo.getCulHomeUrl());
             String tel = placeInfo.getCulTel();
@@ -66,9 +68,9 @@ public class BatchProcessor {
 
     @BatchLog
     @MethodTimer
-    public List<ExhibitionDtoToWrite> processExhibition(List<ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo> performanceInfoList) {
+    public List<ExhibitionDtoToWrite> processExhibition(List<ChangedExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailBodyDTO.Items.Item> performanceInfoList) {
         List<ExhibitionDtoToWrite> exhibitionDtoListToWrite = new ArrayList<>();
-        for (ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo performanceInfo : performanceInfoList) {
+        for (ChangedExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailBodyDTO.Items.Item performanceInfo : performanceInfoList) {
             logger.info("## Processor ## [Before Processing Exhibition Name], {}", performanceInfo.getTitle());
             logger.info("## Processor ## [Before Processing Exhibition Price], {}", performanceInfo.getPrice());
 

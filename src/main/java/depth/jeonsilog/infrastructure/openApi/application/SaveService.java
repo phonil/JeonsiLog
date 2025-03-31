@@ -84,7 +84,7 @@ public class SaveService {
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             ExhibitionListDTO exhibitionList = null;
             try {
-                // Description :  JSON String -> ExhibitionListDTO (Object)
+                // Description :  JSON String -> ChangedExhibitionListDTO (Object)
                 exhibitionList = objectMapper.readValue(listJsonStr, ExhibitionListDTO.class);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
@@ -116,7 +116,7 @@ public class SaveService {
 
                 ExhibitionDetailDTO exhibitionDetail = null;
                 try {
-                    // JSON String -> ExhibitionListDTO (Object)
+                    // JSON String -> ChangedExhibitionListDTO (Object)
                     exhibitionDetail = objectMapper.readValue(detailJsonStr, ExhibitionDetailDTO.class);
 
                 } catch (JsonProcessingException e) {
@@ -146,7 +146,7 @@ public class SaveService {
 
                 PlaceDetailDTO placeDetail = null;
                 try {
-                    // JSON String -> ExhibitionListDTO (Object)
+                    // JSON String -> ChangedExhibitionListDTO (Object)
                     placeDetail = objectMapper.readValue(placeJsonStr, PlaceDetailDTO.class);
 
                     if (placeDetail.getResponse().getMsgBody().getSeq() == 0) {

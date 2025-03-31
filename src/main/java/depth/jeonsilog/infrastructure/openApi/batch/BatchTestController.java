@@ -27,7 +27,7 @@ public class BatchTestController {
 
     @MethodTimer
     @GetMapping("/chunk")
-    public String batchChunk() throws IOException {
+    public String batchChunk() throws IOException, InterruptedException {
         logger.info("####### [Batch Chunk Step Call] #######");
         batchStep.step();
         logger.info("####### [Batch Chunk Step Returned] #######");

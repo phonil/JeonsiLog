@@ -1,9 +1,7 @@
 package depth.jeonsilog.infrastructure.openApi.test.api_call;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import depth.jeonsilog.infrastructure.openApi.ChangedOpenApiCaller;
 import depth.jeonsilog.infrastructure.openApi.OpenApiCaller;
-import depth.jeonsilog.infrastructure.openApi.batch.BatchStep;
-import depth.jeonsilog.infrastructure.openApi.batch.TaskletBatchStep;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -27,7 +25,8 @@ import java.util.concurrent.Executors;
 public class CallOpenApiTestController {
 
     private final OpenApiCaller openApiCaller;
-    private final OpenApiCallerTest openApiCallerTest;
+    private final ChangedOpenApiCaller changedOpenApiCaller;
+    private final RestTemplateOpenApiCallerTest restTemplateOpenApiCallerTest;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @GetMapping("/list-restTemplate")
@@ -37,7 +36,7 @@ public class CallOpenApiTestController {
         String fromDate = "20250311";
         String toDate = "20250311";
         logger.info("[RestTemplate] 요청 시작");
-        String line = openApiCallerTest.callExhibitionListApi(fromDate, toDate, totalPages, rows);
+        String line = restTemplateOpenApiCallerTest.callExhibitionListApi(fromDate, toDate, totalPages, rows);
         logger.info("[RestTemplate] 결과 : {}", line);
         logger.info("[RestTemplate] 요청 종료");
     }
@@ -49,8 +48,11 @@ public class CallOpenApiTestController {
         String fromDate = "20250311";
         String toDate = "20250311";
         logger.info("[httpUrlConnection] 요청 시작");
-        String line = openApiCaller.callExhibitionListApi(fromDate, toDate, totalPages, rows);
-        logger.info("[httpUrlConnection] 결과 : {}", line);
+        String line = changedOpenApiCaller.callExhibitionListApi(fromDate, toDate, totalPages, rows);
+        changedOpenApiCaller.callExhibitionDetailApi(285433);
+        changedOpenApiCaller.callPlaceDetailApi(2838);
+//        String line = openApiCaller.callExhibitionListApi(fromDate, toDate, totalPages, rows);
+//        logger.info("[httpUrlConnection] 결과 : {}", line);
         logger.info("[httpUrlConnection] 요청 종료");
     }
 

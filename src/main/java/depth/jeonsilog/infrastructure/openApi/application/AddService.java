@@ -81,7 +81,7 @@ public class AddService {
 
             ExhibitionListDTO exhibitionList = null;
             try {
-                // Description : JSON String -> ExhibitionListDTO (Object)
+                // Description : JSON String -> ChangedExhibitionListDTO (Object)
                 //   여기서 전시회 seq를 가진 녀석을 List로 받음 !! (page 단위로)
                 exhibitionList = objectMapper.readValue(listJsonStr, ExhibitionListDTO.class);
             } catch (JsonProcessingException e) {
@@ -112,7 +112,7 @@ public class AddService {
 
                     ExhibitionDetailDTO exhibitionDetail = null;
                     try {
-                        // JSON String -> ExhibitionListDTO (Object)
+                        // JSON String -> ChangedExhibitionListDTO (Object)
                         exhibitionDetail = objectMapper.readValue(detailJsonStr, ExhibitionDetailDTO.class);
 
                     } catch (JsonProcessingException e) {
@@ -139,7 +139,7 @@ public class AddService {
 
                     PlaceDetailDTO placeDetail = null;
                     try {
-                        // JSON String -> ExhibitionListDTO (Object)
+                        // JSON String -> ChangedExhibitionListDTO (Object)
                         placeDetail = objectMapper.readValue(placeJsonStr, PlaceDetailDTO.class);
 
                         if (placeDetail.getResponse().getMsgBody().getSeq() == 0) { // 빈 전시 공간

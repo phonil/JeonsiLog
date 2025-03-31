@@ -4,9 +4,9 @@ import depth.jeonsilog.global.aop.BatchLog;
 import depth.jeonsilog.global.aop.MethodTimer;
 import depth.jeonsilog.infrastructure.openApi.batch.processor.BatchProcessor;
 import depth.jeonsilog.infrastructure.openApi.batch.reader.BatchReader;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.afterAPI.ChangedExhibitionDetailDTO;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.afterAPI.ChangedPlaceDetailDTO;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.BatchWriter;
-import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.beforeAPI.ExhibitionDetailDTO;
-import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.beforeAPI.PlaceDetailDTO;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.ExhibitionDtoToWrite;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.PlaceDtoToWrite;
 import lombok.RequiredArgsConstructor;
@@ -28,32 +28,26 @@ public class BatchStep {
 
     @BatchLog
     @MethodTimer
-    public void step() throws IOException {
+    public void step() throws IOException, InterruptedException {
         List<Integer> performanceSeqList = batchReader.readExhibitionList();
-
-        int chunkSize = 100;
+        int chunkSize = 10;
         int total = performanceSeqList.size();
         int startIdx = 0;
 
         while (startIdx < total) {
             int endIdx = Math.min(startIdx + chunkSize, total);
-            // 1) 이번 chunk의 seq
             List<Integer> chunkSeqList = performanceSeqList.subList(startIdx, endIdx);
+            List<ChangedExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailBodyDTO.Items.Item> performInfoList = batchReader.readExhibitionDetail(chunkSeqList);
+            List<ChangedPlaceDetailDTO.PlaceDetailResponseDTO.PlaceDetailBodyDTO.Items.Item> placeInfoList = batchReader.readPlaceDetail(performInfoList);
 
-            // 2) Read detail for chunk
-            List<ExhibitionDetailDTO.ExhibitionDetailResponseDTO.ExhibitionDetailMsgBodyDTO.PerformanceInfo> perfInfoList = batchReader.readExhibitionDetail(chunkSeqList);
-            List<PlaceDetailDTO.PlaceDetailResponseDTO.PlaceDetailMsgBodyDTO.PlaceInfo> placeInfoList = batchReader.readPlaceDetail(perfInfoList);
-
-            // 3) Process
             List<PlaceDtoToWrite> placeDtoList = batchProcessor.processPlace(placeInfoList);
-            List<ExhibitionDtoToWrite> exhibitDtoList = batchProcessor.processExhibition(perfInfoList);
+            List<ExhibitionDtoToWrite> exhibitDtoList = batchProcessor.processExhibition(performInfoList);
 
-            // 4) Write
             List<Integer> placeSeqList = batchWriter.writePlace(placeDtoList);
             batchWriter.writeExhibition(exhibitDtoList, placeSeqList);
 
-            // 5) move next chunk
             startIdx = endIdx;
+//            Thread.sleep(500);
         }
     }
 }
