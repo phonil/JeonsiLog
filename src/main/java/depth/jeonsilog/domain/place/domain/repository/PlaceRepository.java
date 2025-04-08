@@ -1,6 +1,7 @@
 package depth.jeonsilog.domain.place.domain.repository;
 
 import depth.jeonsilog.domain.place.domain.Place;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.PlaceSeqProjection;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -41,5 +42,5 @@ public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceReposi
             @Param("homePage") String homePage
     );
 
-    List<Place> findBySeqIn(List<Integer> placeSeqList);
+    List<PlaceSeqProjection> findBySeqIn(List<Integer> placeSeqList);
 }

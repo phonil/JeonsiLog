@@ -5,6 +5,7 @@ import depth.jeonsilog.domain.place.domain.Place;
 import depth.jeonsilog.domain.place.domain.repository.PlaceRepository;
 import depth.jeonsilog.global.aop.BatchLog;
 import depth.jeonsilog.global.aop.MethodTimer;
+import depth.jeonsilog.infrastructure.openApi.batch.reader.dto.PlaceSeqProjection;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.ExhibitionDtoToWrite;
 import depth.jeonsilog.infrastructure.openApi.batch.writer.dto.PlaceDtoToWrite;
 import lombok.RequiredArgsConstructor;
@@ -43,9 +44,9 @@ public class BatchWriter {
     @MethodTimer
     @Transactional
     public void writeExhibition(List<ExhibitionDtoToWrite> exhibitionDtoListToWrite, List<Integer> placeSeqList) {
-        List<Place> placeList = placeRepository.findBySeqIn(placeSeqList);
+        List<PlaceSeqProjection> placeList = placeRepository.findBySeqIn(placeSeqList);
         Map<Integer, Long> placeIdMap = placeList.stream()
-                .collect(Collectors.toMap(Place::getSeq, Place::getId));
+                .collect(Collectors.toMap(PlaceSeqProjection::getSeq, PlaceSeqProjection::getId));
         for (ExhibitionDtoToWrite exhibitionDtoToWrite : exhibitionDtoListToWrite) {
             logger.info("## Writer ## [Write Exhibition Seq(Upsert)], {}", exhibitionDtoToWrite.getExhibitionSeq());
             Long placeId = placeIdMap.get(exhibitionDtoToWrite.getPlaceSeq());
