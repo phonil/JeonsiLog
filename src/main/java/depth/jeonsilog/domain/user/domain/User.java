@@ -62,9 +62,6 @@ public class User extends BaseEntity {
     @Column(name = "provider_id", nullable = false)
     private String providerId;
 
-    @Column(name = "fcm_token")
-    private String fcmToken;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "user_level", nullable = false)
     private UserLevel userLevel;
@@ -109,16 +106,22 @@ public class User extends BaseEntity {
         this.isRecvActive = isRecvActive;
     }
 
-    public void updateFcmToken(String fcmToken) {
-        this.fcmToken = fcmToken;
-    }
-
     public void updateUserLevel(UserLevel userLevel) {
         this.userLevel = userLevel;
     }
 
+    public void updateUserLevel(int reviewCount) {
+        switch (reviewCount) {
+            case 1 -> this.updateUserLevel(UserLevel.DONE);
+            case 3 -> this.updateUserLevel(UserLevel.BEGINNER);
+            case 10 -> this.updateUserLevel(UserLevel.INTERMEDIATE);
+            case 20 -> this.updateUserLevel(UserLevel.ADVANCED);
+            case 30 -> this.updateUserLevel(UserLevel.MASTER);
+        }
+    }
+
     @Builder
-    public User(Long id, String password, String nickname, String email, String profileImg, Boolean isOpen, Boolean isRecvExhibition, Boolean isRecvActive, Role role, Provider provider, String providerId, @Nullable String fcmToken, UserLevel userLevel) {
+    public User(Long id, String password, String nickname, String email, String profileImg, Boolean isOpen, Boolean isRecvExhibition, Boolean isRecvActive, Role role, Provider provider, String providerId, UserLevel userLevel) {
         this.id = id;
         this.password = password;
         this.nickname = nickname;
@@ -130,7 +133,6 @@ public class User extends BaseEntity {
         this.role = role;
         this.provider = provider;
         this.providerId = providerId;
-        this.fcmToken = fcmToken;
         this.userLevel = userLevel;
     }
 }

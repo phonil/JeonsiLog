@@ -195,12 +195,6 @@ public class UserService {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @Transactional
-    public void updateFcmToken(UserPrincipal userPrincipal, UserRequestDto.UpdateFcmToken updateFcmToken) {
-        User findUser = validateUserByToken(userPrincipal);
-        findUser.updateFcmToken(updateFcmToken.getFcmToken());
-    }
-
     public User validateUserByToken(UserPrincipal userPrincipal) {
         Optional<User> user = userRepository.findById(userPrincipal.getId());
         DefaultAssert.isTrue(user.isPresent(), "유저 정보가 올바르지 않습니다.");

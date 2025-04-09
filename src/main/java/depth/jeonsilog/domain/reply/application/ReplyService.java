@@ -63,7 +63,7 @@ public class ReplyService {
         replyRepository.save(reply);
         review.updateNumReply(review.getNumReply() + 1);
 
-        alarmService.makeReplyAlarm(reply);
+        alarmService.makeReplyAlarm(user, reply);
     }
 
     @Transactional

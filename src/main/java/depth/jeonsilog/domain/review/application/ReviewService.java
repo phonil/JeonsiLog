@@ -51,21 +51,15 @@ public class ReviewService {
 
     @Transactional
     public void writeReview(UserPrincipal userPrincipal, ReviewRequestDto.WriteReviewReq writeReviewReq) throws IOException {
-        User findUser = userService.validateUserByToken(userPrincipal);
+        User user = userService.validateUserByToken(userPrincipal);
         Optional<Exhibition> exhibition = exhibitionRepository.findById(writeReviewReq.getExhibitionId());
         DefaultAssert.isTrue(exhibition.isPresent(), "전시회 id가 올바르지 않습니다.");
 
-        Review review = ReviewConverter.toReview(findUser, exhibition.get(), writeReviewReq.getContents());
+        Review review = ReviewConverter.toReview(user, exhibition.get(), writeReviewReq.getContents());
         reviewRepository.save(review);
 
-        switch (findUser.getReviews().size()) {
-            case 1 -> findUser.updateUserLevel(UserLevel.DONE);
-            case 3 -> findUser.updateUserLevel(UserLevel.BEGINNER);
-            case 10 -> findUser.updateUserLevel(UserLevel.INTERMEDIATE);
-            case 20 -> findUser.updateUserLevel(UserLevel.ADVANCED);
-            case 30 -> findUser.updateUserLevel(UserLevel.MASTER);
-        }
-        alarmService.makeReviewAlarm(review);
+        user.updateUserLevel(user.getReviews().size());
+        alarmService.makeReviewAlarm(user, review);
     }
 
     @Transactional

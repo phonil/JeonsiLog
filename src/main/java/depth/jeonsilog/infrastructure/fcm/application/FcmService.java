@@ -34,13 +34,12 @@ public class FcmService {
     }
 
     // TODO: 활동 알림 만들기
-    public void makeActiveAlarm(String fcmToken, String title) {
-
+    public void makeActiveAlarm(String deviceToken, String title) {
         JSONObject jsonValue = new JSONObject();
         jsonValue.put("title", title);
 
         JSONObject jsonData = new JSONObject();
-        jsonData.put("token", fcmToken);
+        jsonData.put("token", deviceToken);
         jsonData.put("data", jsonValue);
 
         JSONObject jsonMessage = new JSONObject();
@@ -50,14 +49,14 @@ public class FcmService {
     }
 
     // TODO: 전시 알림 만들기
-    public void makeExhibitionAlarm(String fcmToken, String title, String body) {
+    public void makeExhibitionAlarm(String deviceToken, String title, String body) {
 
         JSONObject jsonValue = new JSONObject();
         jsonValue.put("title", title);
         jsonValue.put("body", body);
 
         JSONObject jsonData = new JSONObject();
-        jsonData.put("token", fcmToken);
+        jsonData.put("token", deviceToken);
         jsonData.put("data", jsonValue);
 
         JSONObject jsonMessage = new JSONObject();

@@ -39,17 +39,17 @@ public class RatingService {
     // 별점 등록
     @Transactional
     public void registerRating(UserPrincipal userPrincipal, RatingRequestDto.RatingReq ratingReq) throws IOException {
-        User findUser = userService.validateUserByToken(userPrincipal);
+        User user = userService.validateUserByToken(userPrincipal);
         Exhibition exhibition = exhibitionService.validateExhibitionById(ratingReq.getExhibitionId());
 
-        Optional<Rating> checkDuplication = ratingRepository.findByUserIdAndExhibitionId(findUser.getId(), exhibition.getId());
+        Optional<Rating> checkDuplication = ratingRepository.findByUserIdAndExhibitionId(user.getId(), exhibition.getId());
         DefaultAssert.isTrue(checkDuplication.isEmpty(), "해당하는 별점이 이미 있습니다.");
-        Rating rating = RatingConverter.toRating(findUser, exhibition, ratingReq.getRate());
+        Rating rating = RatingConverter.toRating(user, exhibition, ratingReq.getRate());
         ratingRepository.save(rating);
 
         Double updateRate = calculateRate(exhibition);
         exhibition.updateRate(updateRate);
-        alarmService.makeRatingAlarm(rating);
+        alarmService.makeRatingAlarm(user, rating);
     }
 
     // 별점 수정

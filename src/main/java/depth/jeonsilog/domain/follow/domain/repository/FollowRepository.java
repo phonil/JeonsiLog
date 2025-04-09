@@ -21,7 +21,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
     @Query("SELECT f FROM Follow f JOIN FETCH f.follow WHERE f.user = :user")
     List<Follow> findAllByUser(User user);
 
-    @Query("SELECT f FROM Follow f JOIN FETCH f.user WHERE f.follow = :followUser")
+    @Query("SELECT f FROM Follow f JOIN FETCH f.user JOIN FETCH f.follow WHERE f.follow = :followUser")
     List<Follow> findAllByFollow(User followUser);
 
     Integer countByUser(User user);

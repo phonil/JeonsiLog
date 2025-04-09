@@ -4,6 +4,8 @@ import depth.jeonsilog.domain.alarm.converter.AlarmConverter;
 import depth.jeonsilog.domain.alarm.domain.Alarm;
 import depth.jeonsilog.domain.alarm.domain.AlarmType;
 import depth.jeonsilog.domain.alarm.domain.repository.AlarmRepository;
+import depth.jeonsilog.domain.devide_token.domain.DeviceToken;
+import depth.jeonsilog.domain.devide_token.domain.repository.DeviceTokenRepository;
 import depth.jeonsilog.domain.exhibition.domain.Exhibition;
 import depth.jeonsilog.domain.exhibition.domain.OperatingKeyword;
 import depth.jeonsilog.domain.follow.domain.Follow;
@@ -27,6 +29,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import static depth.jeonsilog.domain.alarm.constant.AlarmConstant.AlarmCreateConstant.*;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -36,22 +40,20 @@ public class AlarmCreateService {
     private final AlarmRepository alarmRepository;
     private final FollowRepository followRepository;
     private final InterestRepository interestRepository;
+    private final DeviceTokenRepository deviceTokenRepository;
     private final FcmService fcmService;
-
-    private static String BEFORE_7DAYS = "전시 시작까지 7일 남았어요";
-    private static String BEFORE_3DAYS = "전시 시작까지 3일 남았어요";
-    private static String BEFORE_1DAYS = "전시 시작까지 1일 남았어요";
-    private static String END_7DAYS = "전시 종료까지 7일 남았어요";
-    private static String END_3DAYS = "전시 종료까지 3일 남았어요";
-    private static String END_1DAYS = "전시 종료까지 1일 남았어요";
 
     // TODO: 팔로잉한 사람의 new 감상평 -> 알림 생성
     @Transactional
-    public void makeReviewAlarm(Review review) throws IOException {
-        List<Follow> follows = followRepository.findAllByFollow(review.getUser());
+    public void makeReviewAlarm(User sender, Review review) throws IOException {
+        List<Follow> follows = followRepository.findAllByFollow(sender);
+        String message = sender.getNickname() + REVIEW_ALARM_SUFFIX_MESSAGE;
+
         for (Follow follow : follows) {
             User receiver = follow.getUser();
-            User sender = follow.getFollow();
+            if (!receiver.getIsRecvActive()) continue;
+            List<DeviceToken> deviceTokenList = deviceTokenRepository.findAllByUser(receiver);
+            if (deviceTokenList.isEmpty()) continue;
 
             Alarm alarm = Alarm.builder()
                     .user(receiver)
@@ -63,18 +65,23 @@ public class AlarmCreateService {
                     .build();
             alarmRepository.save(alarm);
 
-            if (!receiver.getIsRecvActive() || receiver.getFcmToken() == null) return;
-            fcmService.makeActiveAlarm(receiver.getFcmToken(), sender.getNickname() + " 님이 감상평을 남겼어요");
+            deviceTokenList.stream()
+                    .map(DeviceToken::getDeviceToken)
+                    .forEach(token -> fcmService.makeActiveAlarm(token, message));
         }
     }
 
     // TODO: 팔로잉한 사람의 new 별점 -> 알림 생성
     @Transactional
-    public void makeRatingAlarm(Rating rating) throws IOException {
-        List<Follow> follows = followRepository.findAllByFollow(rating.getUser());
+    public void makeRatingAlarm(User sender, Rating rating) throws IOException {
+        List<Follow> follows = followRepository.findAllByFollow(sender);
+        String message = sender.getNickname() + RATING_ALARM_SUFFIX_MESSAGE;
+
         for (Follow follow : follows) {
             User receiver = follow.getUser();
-            User sender = follow.getFollow();
+            if (!receiver.getIsRecvActive()) continue;
+            List<DeviceToken> deviceTokenList = deviceTokenRepository.findAllByUser(receiver);
+            if (deviceTokenList.isEmpty()) continue;
 
             Alarm alarm = Alarm.builder()
                     .user(receiver)
@@ -86,20 +93,24 @@ public class AlarmCreateService {
                     .build();
             alarmRepository.save(alarm);
 
-            if (!receiver.getIsRecvActive() || receiver.getFcmToken() == null) return;
-            fcmService.makeActiveAlarm(receiver.getFcmToken(), sender.getNickname() + " 님이 별점을 남겼어요");
+            deviceTokenList.stream()
+                    .map(DeviceToken::getDeviceToken)
+                    .forEach(token -> fcmService.makeActiveAlarm(token, message));
         }
     }
 
     // TODO: 나의 감상평에 달린 댓글 -> 알림 생성
     @Transactional
-    public void makeReplyAlarm(Reply reply) throws IOException {
+    public void makeReplyAlarm(User sender, Reply reply) throws IOException {
         User receiver = reply.getReview().getUser();
-        User sender = reply.getUser();
         if (receiver.equals(sender)) {
             log.info("알림의 sender와 receiver가 동일 인물입니다.");
             return;
         }
+        if (!receiver.getIsRecvActive()) return;
+        List<DeviceToken> deviceTokenList = deviceTokenRepository.findAllByUser(receiver);
+        if (deviceTokenList.isEmpty()) return;
+        String message = sender.getNickname() + REPLY_ALARM_SUFFIX_MESSAGE;
 
         Alarm alarm = Alarm.builder()
                 .user(receiver)
@@ -111,15 +122,19 @@ public class AlarmCreateService {
                 .build();
         alarmRepository.save(alarm);
 
-        if (!receiver.getIsRecvActive() || receiver.getFcmToken() == null) return;
-        fcmService.makeActiveAlarm(receiver.getFcmToken(), sender.getNickname() + " 님이 댓글을 남겼어요");
+        deviceTokenList.stream()
+                .map(DeviceToken::getDeviceToken)
+                .forEach(token -> fcmService.makeActiveAlarm(token, message));
     }
 
     // TODO: 나를 팔로우 -> 알림 생성
     @Transactional
-    public void makeFollowAlarm(Follow follow) throws IOException {
+    public void makeFollowAlarm(User sender, Follow follow) throws IOException {
         User receiver = follow.getFollow();
-        User sender = follow.getUser();
+        if (!receiver.getIsRecvActive()) return;
+        List<DeviceToken> deviceTokenList = deviceTokenRepository.findAllByUser(receiver);
+        if (deviceTokenList.isEmpty()) return;
+        String message = sender.getNickname() + FOLLOW_ALARM_SUFFIX_MESSAGE;
 
         Alarm alarm = Alarm.builder()
                 .user(receiver)
@@ -131,8 +146,9 @@ public class AlarmCreateService {
                 .build();
         alarmRepository.save(alarm);
 
-        if (!receiver.getIsRecvActive() || receiver.getFcmToken() == null) return;
-        fcmService.makeActiveAlarm(receiver.getFcmToken(), sender.getNickname() + " 님이 나를 팔로우해요");
+        deviceTokenList.stream()
+                .map(DeviceToken::getDeviceToken)
+                .forEach(token -> fcmService.makeActiveAlarm(token, message));
     }
 
     // TODO: 관심 전시회 시작 전 -> 알림 생성
@@ -140,16 +156,17 @@ public class AlarmCreateService {
     @Scheduled(cron = "0 0 9 * * *") // 오전 9시에 실행
     public void makeExhibitionAlarm() {
         List<Interest> interests = interestRepository.findByExhibition_OperatingKeyword(OperatingKeyword.BEFORE_DISPLAY);
-
         LocalDate currentDate = LocalDate.now();
-        log.info("현재 날짜: " + currentDate);
+
         for (Interest interest : interests) {
             Exhibition exhibition = interest.getExhibition();
             User receiver = interest.getUser();
 
-            LocalDate startDate = LocalDate.parse(exhibition.getStartDate(), DateTimeFormatter.ofPattern("yyyyMMdd"));
-            log.info("전시회 시작 날짜: " + startDate);
+            if (!receiver.getIsRecvActive()) continue;
+            List<DeviceToken> deviceTokenList = deviceTokenRepository.findAllByUser(receiver);
+            if (deviceTokenList.isEmpty()) continue;
 
+            LocalDate startDate = LocalDate.parse(exhibition.getStartDate(), DateTimeFormatter.ofPattern("yyyyMMdd"));
             long daysDifference = ChronoUnit.DAYS.between(currentDate, startDate);
             if (daysDifference != 7 && daysDifference != 3 && daysDifference != 1) continue;
             if (checkDuplicateAlarm(receiver.getId(), exhibition.getId(), getBeforeAlarmType(daysDifference))) continue;
@@ -157,9 +174,9 @@ public class AlarmCreateService {
             Alarm alarm = AlarmConverter.toExhibitionAlarm(interest, getBeforeAlarmType(daysDifference));
             alarmRepository.save(alarm);
 
-            if (receiver.getIsRecvExhibition() && receiver.getFcmToken() != null){
-                fcmService.makeExhibitionAlarm(receiver.getFcmToken(), exhibition.getName(), alarm.getContents());
-            }
+            deviceTokenList.stream()
+                    .map(DeviceToken::getDeviceToken)
+                    .forEach(token -> fcmService.makeExhibitionAlarm(token, exhibition.getName(), alarm.getContents()));
         }
     }
 
@@ -174,6 +191,10 @@ public class AlarmCreateService {
             User receiver = interest.getUser();
             Exhibition exhibition = interest.getExhibition();
 
+            if (!receiver.getIsRecvActive()) continue;
+            List<DeviceToken> deviceTokenList = deviceTokenRepository.findAllByUser(receiver);
+            if (deviceTokenList.isEmpty()) continue;
+
             LocalDate endDate = LocalDate.parse(exhibition.getEndDate(), DateTimeFormatter.ofPattern("yyyyMMdd"));
             long daysDifference = ChronoUnit.DAYS.between(currentDate, endDate);
             if (daysDifference != 7 && daysDifference != 3 && daysDifference != 1) continue;
@@ -182,9 +203,9 @@ public class AlarmCreateService {
             Alarm alarm = AlarmConverter.toExhibitionAlarm(interest, getEndAlarmType(daysDifference));
             alarmRepository.save(alarm);
 
-            if (receiver.getIsRecvExhibition() && receiver.getFcmToken() != null){
-                fcmService.makeExhibitionAlarm(receiver.getFcmToken(), exhibition.getName(), alarm.getContents());
-            }
+            deviceTokenList.stream()
+                    .map(DeviceToken::getDeviceToken)
+                    .forEach(token -> fcmService.makeExhibitionAlarm(token, exhibition.getName(), alarm.getContents()));
         }
     }
 

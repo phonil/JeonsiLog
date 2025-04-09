@@ -104,14 +104,4 @@ public class UserController implements UserApi{
     ) {
         return userService.getRecvOrNot(userPrincipal);
     }
-
-
-    @PatchMapping("/fcm/token")
-    public ResponseEntity<Void> updateFcmToken(
-            @CurrentUser UserPrincipal userPrincipal,
-            @RequestBody UserRequestDto.UpdateFcmToken fcmToken
-            ) {
-        userService.updateFcmToken(userPrincipal, fcmToken);
-        return ResponseEntity.noContent().build();
-    }
 }

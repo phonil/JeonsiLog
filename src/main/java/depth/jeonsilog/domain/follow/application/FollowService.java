@@ -34,18 +34,18 @@ public class FollowService {
 
     @Transactional
     public void follow(UserPrincipal userPrincipal, Long userId) throws IOException {
-        User findUser = userService.validateUserByToken(userPrincipal);
+        User user = userService.validateUserByToken(userPrincipal);
         User followUser = userService.validateUserById(userId);
-        DefaultAssert.isTrue((!Objects.equals(findUser, followUser)), "나를 팔로우 할 수 없습니다.");
+        DefaultAssert.isTrue((!Objects.equals(user, followUser)), "나를 팔로우 할 수 없습니다.");
 
-        List<Follow> followings = followRepository.findAllByUser(findUser);
+        List<Follow> followings = followRepository.findAllByUser(user);
         for (Follow follow : followings) {
             DefaultAssert.isTrue(!(Objects.equals(follow.getFollow(), followUser)), "이미 팔로우 한 유저입니다.");
         }
 
-        Follow follow = FollowConverter.toFollow(findUser, followUser);
+        Follow follow = FollowConverter.toFollow(user, followUser);
         followRepository.save(follow);
-        alarmService.makeFollowAlarm(follow);
+        alarmService.makeFollowAlarm(user, follow);
     }
 
     @Transactional

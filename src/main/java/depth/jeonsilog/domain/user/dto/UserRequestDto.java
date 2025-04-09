@@ -15,11 +15,4 @@ public class UserRequestDto {
         @Pattern(regexp = "^(?=.*[가-힣a-zA-Z0-9])[가-힣a-zA-Z0-9]{2,10}", message = "한글, 영어, 숫자 가능, 2~10자, 특수기호 불가")
         private String nickname;
     }
-
-    @Data
-    public static class UpdateFcmToken {
-
-        @Schema(type = "string", example = "c8z22dyWSxqH_e7Gk..", description = "Fcm Token 입니다.")
-        private String fcmToken;
-    }
 }

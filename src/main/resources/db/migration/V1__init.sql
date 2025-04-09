@@ -27,6 +27,16 @@ CREATE TABLE IF NOT EXISTS `user` (
                                       CONSTRAINT pk_user PRIMARY KEY (user_id)
 ) engine=InnoDB;
 
+CREATE TABLE IF NOT EXISTS device_token (
+                                      id                  BIGINT AUTO_INCREMENT                           NOT NULL,
+                                      user_id             BIGINT                                          NOT NULL,
+                                      device_token        VARCHAR(255)                                    NOT NULL,
+                                      created_date        DATETIME(6)                                     NOT NULL,
+                                      modified_date       DATETIME(6)                                     NOT NULL,
+                                      status              ENUM('DELETE','ACTIVE')                         NOT NULL,
+                                      CONSTRAINT pk_device_token PRIMARY KEY (id)
+) engine=InnoDB;
+
 CREATE TABLE IF NOT EXISTS place (
                                      id                  BIGINT AUTO_INCREMENT                           NOT NULL,
                                      seq                 INT                                             NULL,
@@ -168,6 +178,9 @@ CREATE TABLE IF NOT EXISTS reply (
 ALTER TABLE `user`
     ADD CONSTRAINT uk_user_nickname UNIQUE (nickname);
 
+ALTER TABLE device_token
+    ADD CONSTRAINT uk_device_token UNIQUE (device_token);
+
 ALTER TABLE place
     ADD CONSTRAINT uk_place_seq UNIQUE (seq);
 
@@ -254,3 +267,8 @@ ALTER TABLE reply
     ADD CONSTRAINT fk_reply_to_review
         FOREIGN KEY (review_id)
             REFERENCES review (id);
+
+ALTER TABLE device_token
+    ADD CONSTRAINT fk_device_token_to_user
+        FOREIGN KEY (user_id)
+            REFERENCES `user` (user_id);
