@@ -33,4 +33,10 @@ public class DeviceTokenService {
                         }
                 );
     }
+
+    @Transactional
+    public void deleteToken(UserPrincipal userPrincipal, DeviceTokenRequestDto.DeviceTokenReq deviceTokenReq) {
+        User user = userService.validateUserByToken(userPrincipal);
+        deviceTokenRepository.deleteByDeviceToken(deviceTokenReq.getDeviceToken());
+    }
 }

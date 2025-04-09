@@ -20,10 +20,20 @@ public interface DeviceTokenApi {
 
     @Operation(summary = "기기 토큰 등록", description = "기기 토큰을 등록합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "기기 토큰 등록 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
+            @ApiResponse(responseCode = "204", description = "기기 토큰 등록 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "기기 토큰 등록 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     ResponseEntity<Void> registerToken(
+            @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
+            @Parameter(description = "Schemas의 DeviceTokenReq를 확인해주세요.", required = true) @RequestBody DeviceTokenRequestDto.DeviceTokenReq deviceTokenReq
+    );
+
+    @Operation(summary = "기기 토큰 삭제", description = "기기 토큰을 삭제합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "기기 토큰 삭제 성공", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
+            @ApiResponse(responseCode = "400", description = "기기 토큰 삭제 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
+    })
+    ResponseEntity<Void> deleteToken(
             @Parameter(description = "Access Token을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal,
             @Parameter(description = "Schemas의 DeviceTokenReq를 확인해주세요.", required = true) @RequestBody DeviceTokenRequestDto.DeviceTokenReq deviceTokenReq
     );
