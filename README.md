@@ -36,12 +36,13 @@
 
 ## ⚙️ 기술 스택 <a name = "teck_stack"></a>
 
-<img src="https://github.com/user-attachments/assets/54c4ed69-238a-41a0-9b2c-82b0b2cb7cae" alt="메인" width="650" />
+<img src="https://github.com/user-attachments/assets/f93e6e01-c976-4e03-8e69-9e2c0e62b493" alt="메인" width="650" />
+
 <br />
 
 ## 🧬 아키텍처 <a name = "architecture"></a>
 
-<img src="https://github.com/user-attachments/assets/571ee2ca-b569-49a7-a6a2-50d04400cb87" alt="메인" width="650" />
+<img src="https://github.com/user-attachments/assets/54c4ed69-238a-41a0-9b2c-82b0b2cb7cae" alt="메인" width="650" />
 
 - Nginx를 리버스 프록시로 사용
 - 배포를 위한 jar 파일 및 이미지 저장을 위한 AWS S3 저장소
