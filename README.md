@@ -10,14 +10,19 @@
 
 ## 📌 [목차](#index) <a name = "index"></a>
 
-- [프로젝트 소개](#intro_project)
 - [PlayStore](#play_store)
+- [프로젝트 소개](#intro_project)
 - [기술 스택](#teck_stack)
 - [아키텍처](#architecture)
 - [ERD](#erd)
 - [API Docs](#api)
-- [왜 이 기술을 사용했는가?](#why)
+- [기술 사용 이유](#why)
 - [ScreenShot](#outputs)
+
+<br>
+
+## PlayStore <a name = "plae_store"></a>
+[전시로그 - 전시를 기록하다: 전시회 정보 플랫폼](https://play.google.com/store/apps/details?id=com.andletgo.jeonsilog&hl=ko-KR)
 
 <br>
 
@@ -29,15 +34,9 @@
 
 <br />
 
-## PlayStore <a name = "plae_store"></a>
-[전시로그 - 전시를 기록하다: 전시회 정보 플랫폼](https://play.google.com/store/apps/details?id=com.andletgo.jeonsilog&hl=ko-KR)
-
-<br>
-
 ## ⚙️ 기술 스택 <a name = "teck_stack"></a>
 
-<img src="https://github.com/user-attachments/assets/f93e6e01-c976-4e03-8e69-9e2c0e62b493" alt="메인" width="650" />
-
+<img src="https://github.com/user-attachments/assets/54c4ed69-238a-41a0-9b2c-82b0b2cb7cae" alt="메인" width="650" />
 <br />
 
 ## 🧬 아키텍처 <a name = "architecture"></a>
@@ -59,7 +58,7 @@
 ## 📑 API Docs <a name = "api"></a>
 
 팀 내 API 문서 공유를 위해 **Swagger**를 적용했습니다.
-아래는 문서 내용 일부로, 전체 문서는 [여기]()에서 확인하실 수 있습니다.
+아래는 문서 내용 일부입니다.
 
 <img src="https://github.com/user-attachments/assets/77839959-277b-4661-90bb-4580c6c28846" alt="메인" width="650" />
 
