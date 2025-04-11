@@ -1,4 +1,4 @@
-package depth.jeonsilog.infrastructure.openApi.test.api_call;
+package depth.jeonsilog.infrastructure.openApi.v1.test.api_call;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

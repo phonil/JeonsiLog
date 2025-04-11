@@ -1,4 +1,4 @@
-package depth.jeonsilog.infrastructure.openApi.test;
+package depth.jeonsilog.infrastructure.openApi.v1.test;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

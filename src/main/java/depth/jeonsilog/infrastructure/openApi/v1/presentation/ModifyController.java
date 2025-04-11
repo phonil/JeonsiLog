@@ -1,6 +1,6 @@
-package depth.jeonsilog.infrastructure.openApi.presentation;
+package depth.jeonsilog.infrastructure.openApi.v1.presentation;
 
-import depth.jeonsilog.infrastructure.openApi.application.ModifyService;
+import depth.jeonsilog.infrastructure.openApi.v1.application.ModifyService;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

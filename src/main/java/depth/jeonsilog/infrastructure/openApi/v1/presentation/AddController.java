@@ -1,7 +1,7 @@
-package depth.jeonsilog.infrastructure.openApi.presentation;
+package depth.jeonsilog.infrastructure.openApi.v1.presentation;
 
 import depth.jeonsilog.global.aop.MethodTimer;
-import depth.jeonsilog.infrastructure.openApi.application.AddService;
+import depth.jeonsilog.infrastructure.openApi.v1.application.AddService;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
